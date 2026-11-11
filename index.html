@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZAInnovate Fleet Operations Suite</title>
+  <style>
+    :root { --bg: #f6f5f0; --ink: #111315; --accent: #0f5c43; --border: 2px solid #111315; }
+    body { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--bg); color: var(--ink); max-width: 880px; margin: 40px auto; padding: 0 20px; }
+    h1 { font-size: 1.75rem; border-bottom: var(--border); padding-bottom: 12px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 24px; }
+    .card { border: var(--border); padding: 20px; background: #fff; }
+    .card h2 { margin-top: 0; font-size: 1.2rem; }
+    .btn { display: inline-block; margin-top: 12px; padding: 10px 16px; background: var(--ink); color: #fff; text-decoration: none; font-weight: 700; }
+    .btn:hover { background: var(--accent); }
+  </style>
+</head>
+<body>
+  <h1>ZAInnovate Technologies — Fleet Operations & Audit Suite</h1>
+  <p>Zero-dependency operational terminals engineered for South African road freight and distribution centers. 100% QA-verified under ZAI-STD-ENG-001.</p>
+  <div class="grid">
+    <div class="card">
+      <h2>TRIPGUARD V1 — Diesel Debrief Auditor</h2>
+      <p>Fleet fuel consumption vs. vehicle baseline variance auditing, GPS vs. hubodometer tamper detection (&gt;3%), ZAR bleed valuation, and A4 AOD Form 104 export.</p>
+      <a class="btn" href="./diesel-debrief-auditor/">Launch TRIPGUARD V1</a>
+    </div>
+    <div class="card">
+      <h2>PALLETLOCK V1 — CHEP &amp; Loscam Ledger</h2>
+      <p>DC pallet exchange tracking, CHEP/Loscam replacement valuation, aging classification (&gt;14d critical risk), and 72-Hour Formal Demand Notice generation.</p>
+      <a class="btn" href="./chep-pallet-reconciler/">Launch PALLETLOCK V1</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,3181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PALLETLOCK V1: CHEP and Loscam Pallet Exchange and Loss Ledger. Supply chain audit instrument for South African road freight depots.">
+  <title>PALLETLOCK V1 · CHEP and Loscam Pallet Exchange and Loss Ledger</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <style>
+/* Hallmark stamp: theme wayfind (platform), genre modern-minimal, idea: the departure board and pallet ledger as an industrial audit instrument */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V4 · weakest: V, departure board platform aesthetic chosen to match South African depot wayfinding */
+/* Hallmark · waive 64 · the theme material is Chivo Mono throughout · the board face sets the entire page */
+
+    /* Tokens */
+    :root {
+      color-scheme: light;
+      scrollbar-color: var(--color-rule) transparent;
+      caret-color: var(--color-accent);
+      --color-paper:       oklch(95.5% 0.006 250);
+      --color-paper-2:     oklch(91.5% 0.009 250);
+      --color-paper-3:     oklch(99.2% 0.005 250);
+      --color-paper-input: oklch(98.5% 0.005 250);
+      --color-ink:         oklch(16%   0.014 262);
+      --color-ink-2:       oklch(29%   0.014 262);
+      --color-muted:       oklch(47%   0.016 260);
+      --color-rule:        oklch(80%   0.011 250);
+      --color-ink-rule:    oklch(34%   0.014 262);
+      --color-plate-label: oklch(75%   0.016 260);
+      --color-plate-sub:   oklch(65%   0.016 260);
+
+      --color-accent:      oklch(51%   0.22  264);
+      --color-accent-ink:  oklch(99%   0.003 250);
+      --color-accent-2:    oklch(74%   0.16   82);
+      --color-amber-ink:   oklch(16%   0.014 262);
+
+      --color-red:         oklch(52%   0.22   25);
+      --color-red-bg:      oklch(94%   0.04   25);
+      --color-red-light:   oklch(72%   0.18   25);
+      --color-green:       oklch(42%   0.18  145);
+      --color-green-bg:    oklch(94%   0.04  145);
+      --color-green-light: oklch(74%   0.16  145);
+
+      --color-chep:        oklch(46%   0.22  264);
+      --color-chep-bg:     oklch(93%   0.05  264);
+      --color-chep-light:  oklch(72%   0.16  264);
+      --color-loscam:      oklch(48%   0.18   50);
+      --color-loscam-bg:   oklch(94%   0.05   50);
+      --color-white-pal:   oklch(35%   0.02  260);
+      --color-white-bg:    oklch(95%   0.01  260);
+
+      --color-backdrop:    oklch(16%   0.014 262 / 0.7);
+      --color-shadow:      oklch(16%   0.014 262 / 0.3);
+
+      --font-display:      "Chivo Mono", ui-monospace, monospace;
+      --font-body:         var(--font-display);
+
+      --bar:               2px;
+      --hair:              1px;
+
+      --space-2xs:         2px;
+      --space-xs:          4px;
+      --space-sm:          8px;
+      --space-md:          16px;
+      --space-lg:          24px;
+      --space-xl:          40px;
+
+      --text-label:        0.75rem;
+      --text-body:         0.875rem;
+      --text-title:        1.125rem;
+      --text-stat:         2.4rem;
+    }
+
+    /* Reset */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: clip; }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.45;
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1, h2, h3, h4 {
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+    }
+
+    ::selection { background: var(--color-accent-2); color: var(--color-amber-ink); }
+    :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+    .wrap {
+      padding-inline: var(--space-md);
+      width: 100%;
+      max-width: 1600px;
+      margin-inline: auto;
+    }
+
+    /* Top navigation */
+    nav#app-header {
+      border-bottom: var(--bar) solid var(--color-ink);
+      background: var(--color-paper);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .wordmark {
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.03em;
+      color: var(--color-ink);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .wordmark-badge {
+      font-size: var(--text-label);
+      background: var(--color-ink);
+      color: var(--color-paper);
+      padding: var(--space-2xs) var(--space-xs);
+      font-weight: 700;
+    }
+    .depot-indicator {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: var(--text-label);
+      font-weight: 700;
+      color: var(--color-ink-2);
+      border-left: var(--hair) solid var(--color-ink-rule);
+      padding-left: var(--space-sm);
+    }
+    .depot-pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--color-green);
+      display: inline-block;
+      border: 1px solid var(--color-ink);
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-body);
+      font-size: var(--text-label);
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-sm);
+      border: var(--bar) solid var(--color-ink);
+      background: var(--color-paper-3);
+      color: var(--color-ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      text-decoration: none;
+      border-radius: 0;
+      transition: background-color 60ms steps(1), color 60ms steps(1);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn:hover {
+      background: var(--color-ink);
+      color: var(--color-paper-3);
+    }
+    .btn:active {
+      transform: translate(1px, 1px);
+    }
+    .btn:disabled, button:disabled, input:disabled, select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .btn-primary {
+      background: var(--color-accent);
+      border-color: var(--color-ink);
+      color: var(--color-accent-ink);
+    }
+    .btn-primary:hover {
+      background: var(--color-ink);
+      color: var(--color-paper-3);
+    }
+    .btn-amber {
+      background: var(--color-accent-2);
+      border-color: var(--color-ink);
+      color: var(--color-amber-ink);
+    }
+    .btn-amber:hover {
+      background: var(--color-ink);
+      color: var(--color-paper-3);
+    }
+    .btn-red {
+      background: var(--color-red);
+      border-color: var(--color-ink);
+      color: var(--color-accent-ink);
+    }
+    .btn-red:hover {
+      background: var(--color-ink);
+      color: var(--color-paper-3);
+    }
+    .btn-sm {
+      padding: var(--space-2xs) var(--space-xs);
+      font-size: 0.6875rem;
+    }
+
+    /* Hero */
+    .hero {
+      border-bottom: var(--bar) solid var(--color-ink);
+      padding-block: var(--space-md);
+      background: var(--color-paper);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1.3fr;
+      gap: var(--space-md);
+      align-items: stretch;
+    }
+    @media (max-width: 990px) {
+      .hero-grid { grid-template-columns: 1fr; }
+    }
+    .hero-meta {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 1.2rem + 1vw, 2.2rem);
+      margin-bottom: var(--space-xs);
+    }
+    .hero-desc {
+      font-size: var(--text-body);
+      color: var(--color-ink-2);
+      max-width: 62ch;
+      line-height: 1.4;
+    }
+    .hero-tags {
+      display: flex;
+      gap: var(--space-xs);
+      margin-top: var(--space-sm);
+      flex-wrap: wrap;
+    }
+    .tag-chip {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      padding: var(--space-2xs) var(--space-xs);
+      background: var(--color-paper-2);
+      border: var(--hair) solid var(--color-ink-rule);
+      color: var(--color-ink-2);
+    }
+
+    /* Departure board plates */
+    .board-plates {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-xs);
+    }
+    @media (max-width: 760px) {
+      .board-plates { grid-template-columns: repeat(2, 1fr); }
+    }
+    .plate {
+      border: var(--bar) solid var(--color-ink);
+      background: var(--color-ink);
+      color: var(--color-paper);
+      padding: var(--space-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 86px;
+    }
+    .plate-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--color-plate-label);
+    }
+    .plate-value {
+      font-size: clamp(1.15rem, 1rem + 0.6vw, 1.6rem);
+      font-weight: 800;
+      color: var(--color-accent-2);
+      white-space: nowrap;
+      margin-top: var(--space-2xs);
+    }
+    .plate-sub {
+      font-size: 0.6875rem;
+      color: var(--color-plate-sub);
+      margin-top: var(--space-2xs);
+    }
+    .plate--cobalt .plate-value { color: var(--color-chep-light); }
+    .plate--red .plate-value { color: var(--color-red-light); }
+    .plate--green .plate-value { color: var(--color-green-light); }
+
+    /* Secondary audit strip */
+    .audit-strip {
+      border-bottom: var(--bar) solid var(--color-ink);
+      background: var(--color-paper-2);
+      padding-block: var(--space-xs);
+      font-size: var(--text-label);
+    }
+    .audit-strip-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+    .audit-stat-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+    .audit-metric {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .audit-metric-label {
+      color: var(--color-muted);
+      font-weight: 700;
+    }
+    .audit-metric-val {
+      font-weight: 800;
+      color: var(--color-ink);
+    }
+
+    /* Tabs navigation */
+    .tabs-bar {
+      border-bottom: var(--bar) solid var(--color-ink);
+      background: var(--color-paper);
+    }
+    .tabs-list {
+      display: flex;
+      list-style: none;
+      gap: 0;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .tab-btn {
+      font-family: var(--font-body);
+      font-size: var(--text-label);
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-md);
+      border: none;
+      border-right: var(--bar) solid var(--color-ink);
+      background: var(--color-paper);
+      color: var(--color-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      transition: background-color 60ms steps(1), color 60ms steps(1);
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      background: var(--color-paper-2);
+      color: var(--color-ink);
+    }
+    .tab-btn.active {
+      background: var(--color-ink);
+      color: var(--color-paper-3);
+    }
+    .tab-counter {
+      font-size: 0.6875rem;
+      padding: var(--space-2xs) var(--space-xs);
+      border: 1px solid currentColor;
+      font-weight: 700;
+    }
+
+    /* Workspace */
+    .workspace-section {
+      padding-block: var(--space-md);
+      flex: 1;
+    }
+    .tab-pane {
+      display: none;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* Panel */
+    .panel {
+      border: var(--bar) solid var(--color-ink);
+      background: var(--color-paper-3);
+      margin-bottom: var(--space-md);
+    }
+    .panel-header {
+      background: var(--color-paper-2);
+      border-bottom: var(--bar) solid var(--color-ink);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
+    .panel-title {
+      font-size: var(--text-label);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .panel-body {
+      padding: var(--space-md);
+    }
+
+    /* Preset buttons */
+    .presets-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      overflow-x: auto;
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-sm);
+      border-bottom: var(--hair) solid var(--color-rule);
+    }
+    .preset-chip {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      padding: var(--space-2xs) var(--space-xs);
+      border: var(--hair) solid var(--color-ink);
+      background: var(--color-paper-2);
+      color: var(--color-ink);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .preset-chip:hover {
+      background: var(--color-ink);
+      color: var(--color-paper-3);
+    }
+
+    /* Form grid */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-sm);
+    }
+    @media (max-width: 1024px) {
+      .form-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xs);
+    }
+    .form-group.col-span-2 {
+      grid-column: span 2;
+    }
+    @media (max-width: 600px) {
+      .form-group.col-span-2 { grid-column: span 1; }
+    }
+    .form-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--color-ink-2);
+    }
+    .form-input, .form-select, .form-textarea {
+      font-family: var(--font-body);
+      font-size: var(--text-body);
+      font-variant-numeric: tabular-nums;
+      padding: var(--space-xs) var(--space-sm);
+      border: var(--bar) solid var(--color-ink);
+      background: var(--color-paper-3);
+      color: var(--color-ink);
+      border-radius: 0;
+      width: 100%;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      background: var(--color-paper-input);
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    /* Calculation banner */
+    .calc-banner {
+      background: var(--color-paper-2);
+      border: var(--bar) solid var(--color-ink);
+      padding: var(--space-sm) var(--space-md);
+      margin-top: var(--space-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+    .calc-items {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+    .calc-unit {
+      display: flex;
+      flex-direction: column;
+    }
+    .calc-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--color-muted);
+    }
+    .calc-val {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+    .calc-val.val-amber { color: var(--color-accent-2); }
+    .calc-val.val-red { color: var(--color-red); }
+    .calc-val.val-green { color: var(--color-green); }
+
+    /* Filter toolbar */
+    .filter-toolbar {
+      border: var(--bar) solid var(--color-ink);
+      background: var(--color-paper-2);
+      padding: var(--space-sm) var(--space-md);
+      margin-bottom: var(--space-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+    .filter-inputs {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+      flex: 1;
+    }
+    .search-field {
+      min-width: 200px;
+      max-width: 320px;
+    }
+
+    /* Tables */
+    .table-container {
+      border: var(--bar) solid var(--color-ink);
+      background: var(--color-paper-3);
+      overflow-x: auto;
+      margin-bottom: var(--space-md);
+    }
+    .ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-body);
+      white-space: nowrap;
+    }
+    .ledger-table th {
+      background: var(--color-ink);
+      color: var(--color-paper);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-md);
+      text-align: left;
+      border-right: var(--hair) solid var(--color-ink-rule);
+      user-select: none;
+    }
+    .ledger-table th:last-child {
+      border-right: none;
+    }
+    .ledger-table td {
+      padding: var(--space-xs) var(--space-md);
+      border-bottom: var(--hair) solid var(--color-rule);
+      border-right: var(--hair) solid var(--color-rule);
+      color: var(--color-ink);
+      vertical-align: middle;
+    }
+    .ledger-table td:last-child {
+      border-right: none;
+    }
+    .ledger-table tbody tr:hover {
+      background: var(--color-paper-2);
+    }
+    .ledger-table tbody tr.row-critical {
+      background: var(--color-red-bg);
+    }
+    .ledger-table tbody tr.row-critical:hover {
+      background: var(--color-paper-2);
+    }
+    .ledger-table tfoot td {
+      background: var(--color-paper-2);
+      font-weight: 800;
+      border-top: var(--bar) solid var(--color-ink);
+      border-bottom: none;
+    }
+
+    /* Status badges */
+    .badge {
+      display: inline-block;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      padding: var(--space-2xs) var(--space-xs);
+      border: var(--hair) solid var(--color-ink);
+    }
+    .badge-chep {
+      background: var(--color-chep-bg);
+      border-color: var(--color-chep);
+      color: var(--color-chep);
+    }
+    .badge-loscam {
+      background: var(--color-loscam-bg);
+      border-color: var(--color-loscam);
+      color: var(--color-loscam);
+    }
+    .badge-white {
+      background: var(--color-white-bg);
+      border-color: var(--color-white-pal);
+      color: var(--color-white-pal);
+    }
+    .badge-critical {
+      background: var(--color-red);
+      border-color: var(--color-ink);
+      color: var(--color-accent-ink);
+      animation: pulse-danger 2s infinite ease-in-out;
+    }
+    .badge-warning {
+      background: var(--color-accent-2);
+      border-color: var(--color-ink);
+      color: var(--color-amber-ink);
+    }
+    .badge-normal {
+      background: var(--color-green-bg);
+      border-color: var(--color-green);
+      color: var(--color-green);
+    }
+    .badge-balanced {
+      background: var(--color-paper-2);
+      border-color: var(--color-ink-rule);
+      color: var(--color-ink-2);
+    }
+
+    @keyframes pulse-danger {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.75; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Account cards */
+    .account-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .account-card {
+      border: var(--bar) solid var(--color-ink);
+      background: var(--color-paper-3);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .account-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      border-bottom: var(--hair) solid var(--color-rule);
+      padding-bottom: var(--space-xs);
+    }
+    .account-name {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+    .account-trips-count {
+      font-size: 0.6875rem;
+      color: var(--color-muted);
+      font-weight: 700;
+    }
+    .account-stat-matrix {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xs);
+      background: var(--color-paper-2);
+      padding: var(--space-xs);
+      border: var(--hair) solid var(--color-ink-rule);
+    }
+    .account-metric-cell {
+      text-align: center;
+    }
+    .account-metric-cell .cell-label {
+      font-size: 0.6875rem;
+      color: var(--color-muted);
+      font-weight: 700;
+    }
+    .account-metric-cell .cell-val {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+    .aging-progress-bar {
+      display: flex;
+      height: 8px;
+      border: var(--hair) solid var(--color-ink);
+      background: var(--color-paper-2);
+      overflow: hidden;
+      margin-top: var(--space-xs);
+    }
+    .aging-seg-normal { background: var(--color-green); }
+    .aging-seg-warning { background: var(--color-accent-2); }
+    .aging-seg-critical { background: var(--color-red); }
+
+    /* Demand notice sheet */
+    .notice-wrapper {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: var(--space-md);
+    }
+    @media (max-width: 900px) {
+      .notice-wrapper { grid-template-columns: 1fr; }
+    }
+    .notice-controls {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .notice-sheet {
+      border: var(--bar) solid var(--color-ink);
+      background: var(--color-paper-3);
+      padding: var(--space-xl);
+      box-shadow: 4px 4px 0px var(--color-ink);
+      color: var(--color-ink);
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+    .sheet-letterhead {
+      border-bottom: var(--bar) solid var(--color-ink);
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-md);
+    }
+    .sheet-depot-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .sheet-meta-block {
+      text-align: right;
+      font-size: 0.6875rem;
+      color: var(--color-ink-2);
+    }
+    .sheet-subject {
+      background: var(--color-paper-2);
+      border: var(--hair) solid var(--color-ink);
+      padding: var(--space-sm) var(--space-md);
+      font-weight: 800;
+      font-size: 0.875rem;
+      margin-block: var(--space-md);
+    }
+    .sheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-block: var(--space-md);
+      font-size: 0.75rem;
+    }
+    .sheet-table th, .sheet-table td {
+      border: 1px solid var(--color-ink);
+      padding: var(--space-xs) var(--space-sm);
+      text-align: left;
+    }
+    .sheet-table th {
+      background: var(--color-paper-2);
+      font-weight: 700;
+    }
+    .sheet-signatures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px dashed var(--color-ink-rule);
+    }
+    .sig-line {
+      border-top: 1px solid var(--color-ink);
+      margin-top: var(--space-xl);
+      padding-top: var(--space-xs);
+      font-size: 0.6875rem;
+      font-weight: 700;
+    }
+
+    /* WhatsApp terminal */
+    .whatsapp-box {
+      border: var(--bar) solid var(--color-ink);
+      background: var(--color-paper-2);
+      padding: var(--space-md);
+      position: relative;
+    }
+    .whatsapp-terminal {
+      font-family: var(--font-body);
+      background: var(--color-paper-3);
+      border: var(--bar) solid var(--color-ink);
+      padding: var(--space-md);
+      white-space: pre-wrap;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      color: var(--color-ink);
+      max-height: 480px;
+      overflow-y: auto;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: var(--color-backdrop);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-md);
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal-dialog {
+      border: var(--bar) solid var(--color-ink);
+      background: var(--color-paper-3);
+      width: 100%;
+      max-width: 620px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 6px 6px 0px var(--color-ink);
+    }
+    .modal-header {
+      background: var(--color-ink);
+      color: var(--color-paper);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title {
+      font-size: var(--text-label);
+      font-weight: 700;
+    }
+    .modal-body {
+      padding: var(--space-md);
+      overflow-y: auto;
+    }
+    .modal-footer {
+      background: var(--color-paper-2);
+      border-top: var(--bar) solid var(--color-ink);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--space-xs);
+    }
+
+    /* Toast */
+    #toast-msg {
+      position: fixed;
+      bottom: var(--space-md);
+      right: var(--space-md);
+      background: var(--color-ink);
+      color: var(--color-paper-3);
+      border: var(--bar) solid var(--color-accent-2);
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--text-label);
+      font-weight: 700;
+      z-index: 200;
+      display: none;
+      box-shadow: 4px 4px 0px var(--color-shadow);
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: var(--color-paper-3) !important;
+        color: var(--color-ink) !important;
+        font-size: 10pt !important;
+      }
+      #app-header,
+      .hero,
+      .audit-strip,
+      .tabs-bar,
+      .notice-controls,
+      .presets-row,
+      .nav-actions,
+      .btn,
+      .filter-toolbar,
+      #tab-ledger,
+      #tab-accounts,
+      #tab-whatsapp,
+      .modal-backdrop,
+      #toast-msg,
+      footer {
+        display: none !important;
+      }
+      .workspace-section {
+        padding: 0 !important;
+      }
+      #tab-demand {
+        display: block !important;
+      }
+      .notice-wrapper {
+        display: block !important;
+      }
+      .notice-sheet {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top navigation bar -->
+  <nav id="app-header">
+    <div class="wrap nav-inner">
+      <div class="brand-block">
+        <a class="wordmark" href="#" id="brand-logo" aria-label="PalletLock Home">
+          <span>PALLET▪LOCK</span>
+          <span class="wordmark-badge">V1.0</span>
+        </a>
+        <div class="depot-indicator" id="depot-status-indicator">
+          <span class="depot-pulse"></span>
+          <span id="nav-depot-label">Depot: Wilsonia (East London)</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button type="button" class="btn btn-sm" id="btn-depot-settings" title="Configure Depot Profile">
+          Depot config
+        </button>
+        <button type="button" class="btn btn-sm" id="btn-export-csv" title="Download Ledger as CSV">
+          Export CSV
+        </button>
+        <button type="button" class="btn btn-sm" id="btn-backup-json" title="Export Ledger as JSON">
+          Backup JSON
+        </button>
+        <button type="button" class="btn btn-sm" id="btn-import-json-trigger" title="Import Ledger from JSON">
+          Import JSON
+        </button>
+        <button type="button" class="btn btn-sm" id="btn-reset-demo" title="Restore Standard SA Freight Dataset">
+          Reset demo
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-meta">
+        <div>
+          <h1>CHEP and Loscam Pallet Exchange and Loss Ledger</h1>
+          <p class="hero-desc">
+            Industrial shrinkage auditor and equipment liability ledger for South African manufacturing dispatch and road freight cross-dock depots.
+          </p>
+        </div>
+        <div class="hero-tags">
+          <span class="tag-chip">CHEP Blue: R395/unit</span>
+          <span class="tag-chip">Loscam Wood: R360/unit</span>
+          <span class="tag-chip">White/Export: R140/unit</span>
+          <span class="tag-chip">Strict 1:1 Bay Exchange</span>
+        </div>
+      </div>
+
+      <!-- Departure board plates -->
+      <div class="board-plates" id="departure-board">
+        <div class="plate plate--amber" id="plate-liability-box">
+          <span class="plate-label">Total capital at risk</span>
+          <span class="plate-value" id="kpi-total-liability">R 0.00</span>
+          <span class="plate-sub" id="kpi-sub-accounts">0 Active Receivers</span>
+        </div>
+        <div class="plate plate--cobalt" id="plate-unreturned-box">
+          <span class="plate-label">Unreturned pallets</span>
+          <span class="plate-value" id="kpi-total-unreturned">0 UNITS</span>
+          <span class="plate-sub" id="kpi-sub-breakdown">CHEP / Loscam Deficit</span>
+        </div>
+        <div class="plate plate--red" id="plate-critical-box">
+          <span class="plate-label">Critical risk (&gt;14 days)</span>
+          <span class="plate-value" id="kpi-critical-liability">R 0.00</span>
+          <span class="plate-sub" id="kpi-critical-count">0 Overdue Units</span>
+        </div>
+        <div class="plate plate--green" id="plate-recovery-box">
+          <span class="plate-label">Immediate return rate</span>
+          <span class="plate-value" id="kpi-recovery-rate">0.0%</span>
+          <span class="plate-sub" id="kpi-total-trips">0 Total Movements</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Secondary audit strip -->
+  <div class="audit-strip">
+    <div class="wrap audit-strip-inner">
+      <div class="audit-stat-group">
+        <div class="audit-metric">
+          <span class="audit-metric-label">Total delivered:</span>
+          <span class="audit-metric-val" id="strip-total-delivered">0 Units</span>
+        </div>
+        <div class="audit-metric">
+          <span class="audit-metric-label">Empties returned:</span>
+          <span class="audit-metric-val" id="strip-total-returned">0 Units</span>
+        </div>
+        <div class="audit-metric">
+          <span class="audit-metric-label">Warning pipeline (7 to 14 days):</span>
+          <span class="audit-metric-val" id="strip-warning-liability">R 0.00 (0 Units)</span>
+        </div>
+      </div>
+      <div class="audit-stat-group">
+        <div class="audit-metric">
+          <span class="audit-metric-label">Top debtor:</span>
+          <span class="audit-metric-val" id="strip-top-debtor">None</span>
+        </div>
+        <div class="audit-metric">
+          <span class="audit-metric-label">CHEP pool acct:</span>
+          <span class="audit-metric-val" id="strip-chep-account">CHEP-SA-904128</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs navigation -->
+  <div class="tabs-bar">
+    <div class="wrap">
+      <ul class="tabs-list" role="tablist">
+        <li>
+          <button type="button" class="tab-btn active" id="tab-btn-ledger" role="tab" aria-selected="true" aria-controls="tab-ledger">
+            <span>Movement entry and ledger</span>
+            <span class="tab-counter" id="tab-counter-ledger">0</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="tab-btn" id="tab-btn-accounts" role="tab" aria-selected="false" aria-controls="tab-accounts">
+            <span>DC account balances and aging</span>
+            <span class="tab-counter" id="tab-counter-accounts">0</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="tab-btn" id="tab-btn-demand" role="tab" aria-selected="false" aria-controls="tab-demand">
+            <span>Recovery demand notice (print)</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="tab-btn" id="tab-btn-whatsapp" role="tab" aria-selected="false" aria-controls="tab-whatsapp">
+            <span>WhatsApp dispatch intel</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Primary workspace -->
+  <main class="wrap workspace-section">
+
+    <!-- Tab 1: Movement entry and ledger -->
+    <div class="tab-pane active" id="tab-ledger" role="tabpanel">
+
+      <section class="panel" id="entry-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>Log pallet movement or bay dispatch</span>
+          </div>
+          <div>
+            <span class="form-label">SA DC presets:</span>
+          </div>
+        </div>
+        <div class="panel-body">
+
+          <!-- Presets -->
+          <div class="presets-row" id="presets-strip">
+            <button type="button" class="preset-chip" id="preset-shoprite">Shoprite DC (34 CHEP)</button>
+            <button type="button" class="preset-chip" id="preset-spar">Spar Distribution (28 CHEP)</button>
+            <button type="button" class="preset-chip" id="preset-idz">IDZ Auto Plant (40 Loscam)</button>
+            <button type="button" class="preset-chip" id="preset-distell">Distell Greenbushes (24 CHEP)</button>
+            <button type="button" class="preset-chip" id="preset-massmart">Massmart DC (32 CHEP)</button>
+            <button type="button" class="preset-chip" id="preset-pnp">Pick n Pay DC (26 Export)</button>
+          </div>
+
+          <!-- Movement Form -->
+          <form id="pallet-entry-form" autocomplete="off">
+            <input type="hidden" id="entry-edit-id" value="">
+
+            <div class="form-grid">
+              <div class="form-group col-span-2">
+                <label class="form-label" for="entry-account">Account or customer name *</label>
+                <input type="text" class="form-input" id="entry-account" list="account-suggestions" placeholder="e.g. Shoprite DC Wells Estate" required>
+                <datalist id="account-suggestions">
+                  <option value="Shoprite DC Wells Estate">
+                  <option value="Spar Distribution PE / Gqeberha">
+                  <option value="IDZ Auto Plant East London">
+                  <option value="Distell Greenbushes PE">
+                  <option value="Massmart Distribution City Deep">
+                  <option value="Pick n Pay DC Gqeberha">
+                  <option value="Clover Dairies Fort Jackson">
+                  <option value="Aspen Pharmacare Gqeberha">
+                  <option value="Mercedes-Benz SA Logistics Park">
+                </datalist>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="entry-equipment">Equipment pool type *</label>
+                <select class="form-select" id="entry-equipment" required>
+                  <option value="CHEP_BLUE" selected>CHEP Blue Pallet (R395)</option>
+                  <option value="LOSCAM_WOOD">Loscam Wooden Pallet (R360)</option>
+                  <option value="PLAIN_WHITE">Plain White / Export (R140)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="entry-waybill">Delivery note or waybill *</label>
+                <input type="text" class="form-input" id="entry-waybill" placeholder="e.g. WB-89410" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="entry-date">Movement date *</label>
+                <input type="date" class="form-input" id="entry-date" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="entry-vehicle">Fleet ID or vehicle reg</label>
+                <input type="text" class="form-input" id="entry-vehicle" placeholder="e.g. CA 492-104">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="entry-driver">Driver name</label>
+                <input type="text" class="form-input" id="entry-driver" placeholder="e.g. Sipho Ndlovu">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="entry-shift">Shift or corridor</label>
+                <select class="form-select" id="entry-shift">
+                  <option value="Day Shift Dispatch">Day Shift Dispatch</option>
+                  <option value="Night Linehaul">Night Linehaul</option>
+                  <option value="N2 Coastal Trunk (EL-PE)">N2 Coastal Trunk (EL-PE)</option>
+                  <option value="N6 Inland Trunk (EL-JHB)">N6 Inland Trunk (EL-JHB)</option>
+                  <option value="Local Cross-Dock">Local Cross-Dock</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="entry-delivered">Pallets delivered (outward) *</label>
+                <input type="number" class="form-input" id="entry-delivered" min="0" step="1" value="30" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="entry-returned">Pallets returned (empties) *</label>
+                <input type="number" class="form-input" id="entry-returned" min="0" step="1" value="0" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="entry-unit-cost">Unit cost override (ZAR)</label>
+                <input type="number" class="form-input" id="entry-unit-cost" min="0" step="1" value="395">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="entry-reason">Reason code (if unreturned) *</label>
+                <select class="form-select" id="entry-reason" required>
+                  <option value="DC Exchange Pending">DC Exchange Pending (No empties at bay)</option>
+                  <option value="IOU Voucher Issued">IOU Voucher Issued (Paper slip held)</option>
+                  <option value="Refused by Receiver">Refused by Receiver (Short stock claim)</option>
+                  <option value="Damaged/Scrapped">Damaged / Scrapped by DC (Disputed)</option>
+                  <option value="Bay Congestion - Short Returned">Bay Congestion - Short Returned</option>
+                  <option value="Driver Failed to Collect">Driver Failed to Collect (Driver error)</option>
+                  <option value="Full Exchange Balanced">Full Exchange Balanced (0 Variance)</option>
+                </select>
+              </div>
+
+              <div class="form-group col-span-2">
+                <label class="form-label" for="entry-receiver-ref">Receiver slip, voucher number or bay officer</label>
+                <input type="text" class="form-input" id="entry-receiver-ref" placeholder="e.g. Bay 14: Supervisor Mokoena / IOU V-4421">
+              </div>
+
+              <div class="form-group col-span-2">
+                <label class="form-label" for="entry-notes">Audit notes and observations</label>
+                <input type="text" class="form-input" id="entry-notes" placeholder="e.g. Driver noted bay was congested; security stamped waybill">
+              </div>
+            </div>
+
+            <div class="calc-banner" id="entry-calc-banner">
+              <div class="calc-items">
+                <div class="calc-unit">
+                  <span class="calc-label">Trip net variance:</span>
+                  <span class="calc-val val-amber" id="calc-preview-variance">+30 Pallets</span>
+                </div>
+                <div class="calc-unit">
+                  <span class="calc-label">Immediate trip financial risk:</span>
+                  <span class="calc-val val-red" id="calc-preview-liability">R 11,850.00</span>
+                </div>
+                <div class="calc-unit">
+                  <span class="calc-label">Equipment category:</span>
+                  <span class="calc-val" id="calc-preview-equipment">CHEP Blue Pallet</span>
+                </div>
+              </div>
+              <div style="display: flex; gap: var(--space-xs); align-items: center;">
+                <button type="submit" class="btn btn-primary" id="btn-submit-entry">
+                  Log pallet movement
+                </button>
+                <button type="button" class="btn" id="btn-cancel-edit" style="display: none;">
+                  Cancel edit
+                </button>
+                <button type="button" class="btn" id="btn-clear-form">
+                  Reset form
+                </button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </section>
+
+      <!-- Filter toolbar -->
+      <div class="filter-toolbar" id="ledger-filter-toolbar">
+        <div class="filter-inputs">
+          <input type="text" class="form-input search-field" id="filter-search" placeholder="Search waybill, account, driver, truck...">
+          
+          <select class="form-select" id="filter-account" style="width: auto;">
+            <option value="ALL">All DC Accounts</option>
+          </select>
+
+          <select class="form-select" id="filter-equipment" style="width: auto;">
+            <option value="ALL">All Equipment Types</option>
+            <option value="CHEP_BLUE">CHEP Blue Only</option>
+            <option value="LOSCAM_WOOD">Loscam Wood Only</option>
+            <option value="PLAIN_WHITE">White / Export Only</option>
+          </select>
+
+          <select class="form-select" id="filter-risk" style="width: auto;">
+            <option value="ALL">All Risk Stages</option>
+            <option value="CRITICAL">Critical Risk (&gt;14 Days)</option>
+            <option value="WARNING">Warning Period (7 to 14 Days)</option>
+            <option value="NORMAL">Normal Operational (&lt;7 Days)</option>
+            <option value="BALANCED">Balanced / Reconciled (0)</option>
+          </select>
+        </div>
+        <div style="display: flex; gap: var(--space-xs); align-items: center;">
+          <span class="form-label" id="filter-count-label">Showing 0 / 0 Trips</span>
+          <button type="button" class="btn btn-sm" id="btn-clear-filters">Clear filters</button>
+        </div>
+      </div>
+
+      <!-- Master ledger table -->
+      <div class="table-container" id="ledger-table-container">
+        <table class="ledger-table" id="master-ledger-table">
+          <thead>
+            <tr>
+              <th>Date / shift</th>
+              <th>Waybill / DN</th>
+              <th>Customer / DC receiver</th>
+              <th>Fleet / driver</th>
+              <th>Equipment</th>
+              <th>Del / ret / owed</th>
+              <th>Reason and slip ref</th>
+              <th>Aging and risk</th>
+              <th>Liability (ZAR)</th>
+              <th style="text-align: right;">Action controls</th>
+            </tr>
+          </thead>
+          <tbody id="ledger-tbody">
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5">Filtered ledger totals</td>
+              <td id="tfoot-totals-counts">0 Del / 0 Ret = 0 Owed</td>
+              <td>(Total)</td>
+              <td id="tfoot-totals-aging">Verified</td>
+              <td id="tfoot-totals-liability">R 0.00</td>
+              <td style="text-align: right;">Complete</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- Tab 2: DC account balances -->
+    <div class="tab-pane" id="tab-accounts" role="tabpanel">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>Running account liability and DC recovery matrix</span>
+          </div>
+          <div>
+            <span class="form-label">Aggregated by receiving destination</span>
+          </div>
+        </div>
+        <div class="panel-body">
+          <p style="font-size: 0.8125rem; color: var(--color-ink-2); margin-bottom: var(--space-md);">
+            Continuous reconciliation balances for all delivery destinations. At R395/CHEP and R360/Loscam, accounts with unreturned equipment aged beyond 14 days represent immediate capital write-offs requiring formal commercial recovery demands.
+          </p>
+
+          <div class="account-cards-grid" id="account-cards-container">
+          </div>
+
+          <div class="table-container" style="margin-top: var(--space-md);">
+            <table class="ledger-table" id="accounts-summary-table">
+              <thead>
+                <tr>
+                  <th>Customer / DC account</th>
+                  <th>CHEP owed</th>
+                  <th>Loscam owed</th>
+                  <th>White owed</th>
+                  <th>Total pallets owed</th>
+                  <th>Oldest ticket</th>
+                  <th>Risk bracket</th>
+                  <th>Total liability (ZAR)</th>
+                  <th style="text-align: right;">Recovery actions</th>
+                </tr>
+              </thead>
+              <tbody id="accounts-tbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Recovery demand notice -->
+    <div class="tab-pane" id="tab-demand" role="tabpanel">
+      <div class="notice-wrapper">
+
+        <div class="notice-controls" id="notice-controls-panel">
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Demand configuration</span>
+            </div>
+            <div class="panel-body" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+
+              <div class="form-group">
+                <label class="form-label" for="demand-target-account">Target customer / DC *</label>
+                <select class="form-select" id="demand-target-account">
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="demand-ultimatum">Resolution deadline</label>
+                <select class="form-select" id="demand-ultimatum">
+                  <option value="72 Hours (Standard Notice)">72 Hours (Standard Notice)</option>
+                  <option value="48 Hours (Urgent Write-off Notice)">48 Hours (Urgent Write-off Notice)</option>
+                  <option value="5 Working Days (Final Formal Demand)">5 Working Days (Final Formal Demand)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="demand-signatory">Signing operations authority</label>
+                <input type="text" class="form-input" id="demand-signatory" value="Bongani Mthembu (Logistics & Fleet Operations Manager)">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="demand-ref-number">Notice reference number</label>
+                <input type="text" class="form-input" id="demand-ref-number" value="REC-DEMAND-2026-092">
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: var(--space-xs); margin-top: var(--space-xs);">
+                <button type="button" class="btn btn-primary" id="btn-print-demand">
+                  Print formal demand (A4 PDF)
+                </button>
+                <button type="button" class="btn" id="btn-copy-demand-text">
+                  Copy letter text
+                </button>
+              </div>
+
+              <p style="font-size: 0.6875rem; color: var(--color-muted); line-height: 1.4; margin-top: var(--space-xs);">
+                This formal recovery notice conforms to South African road freight standard conditions of carriage and CHEP / Loscam pool equipment transfer agreements.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <article class="notice-sheet" id="demand-letter-sheet">
+          <header class="sheet-letterhead">
+            <div>
+              <div class="sheet-depot-name" id="sheet-depot-title">Wilsonia Logistics Hub</div>
+              <div style="font-size: 0.6875rem; color: var(--color-ink-2); margin-top: var(--space-2xs);" id="sheet-depot-address">
+                Peffer Street, Wilsonia Industrial, East London, 5200, Eastern Cape, South Africa
+              </div>
+              <div style="font-size: 0.6875rem; color: var(--color-ink-2);">
+                Tel: +27 (0)43 745 1900, E-mail: dispatch@wilsonialogistics.co.za
+              </div>
+            </div>
+            <div class="sheet-meta-block">
+              <div><strong>Date:</strong> <span id="sheet-date-val">10 November 2026</span></div>
+              <div><strong>Ref:</strong> <span id="sheet-ref-val">REC-DEMAND-2026-092</span></div>
+              <div><strong>CHEP pool acct:</strong> <span id="sheet-chep-acct">CHEP-SA-904128</span></div>
+              <div><strong>Loscam acct:</strong> <span id="sheet-loscam-acct">LOS-SA-44109</span></div>
+            </div>
+          </header>
+
+          <div style="margin-bottom: var(--space-md);">
+            <div><strong>To:</strong> Operations and receiving bay management</div>
+            <div><strong>Customer / DC:</strong> <span id="sheet-target-customer" style="font-weight: 800; font-size: 1rem;">Shoprite DC Wells Estate</span></div>
+            <div><strong>Corridor:</strong> Eastern Cape Distribution Network</div>
+          </div>
+
+          <div class="sheet-subject">
+            Formal commercial demand: Immediate return of pool pallet equipment (CHEP / Loscam) or authorization to invoice for unreturned assets
+          </div>
+
+          <p style="margin-bottom: var(--space-sm);">
+            Dear receiving bay and operations management,
+          </p>
+          <p style="margin-bottom: var(--space-sm);">
+            According to our dispatch depot delivery manifests and verified waybills, our linehaul vehicles delivered palletized goods to your receiving bays under standard 1:1 equipment exchange agreements. As of the audit date recorded above, your receiving depot has accumulated an unreturned deficit of pool equipment detailed below:
+          </p>
+
+          <table class="sheet-table" id="sheet-items-table">
+            <thead>
+              <tr>
+                <th>Delivery date</th>
+                <th>Waybill</th>
+                <th>Vehicle and driver</th>
+                <th>Equipment type</th>
+                <th>Delivered</th>
+                <th>Returned</th>
+                <th>Unreturned</th>
+                <th>Unit cost</th>
+                <th>Financial indemnity</th>
+              </tr>
+            </thead>
+            <tbody id="sheet-table-tbody">
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="6" style="font-weight: 800; text-align: right;">Total outstanding asset liability:</td>
+                <td id="sheet-total-pallets" style="font-weight: 800;">0 Units</td>
+                <td>(Total)</td>
+                <td id="sheet-total-liability" style="font-weight: 800; font-size: 0.875rem;">R 0.00</td>
+              </tr>
+            </tfoot>
+          </table>
+
+          <div style="background: var(--color-paper-2); border: 1px solid var(--color-ink-rule); padding: var(--space-sm); margin-block: var(--space-md); font-size: 0.75rem;">
+            <strong>Mandatory resolution timeframe:</strong> Please be advised that you are granted <span id="sheet-ultimatum-text" style="font-weight: 800;">72 Hours</span> from date of receipt of this notice to satisfy this deficit via one of the following compliant procedures:
+            <ol style="margin-left: var(--space-lg); margin-top: var(--space-xs);">
+              <li>Release equivalent certified empty pool pallets (CHEP Blue Grade A / Loscam) to our designated recovery driver upon presentation of this notice.</li>
+              <li>Issue authorized, valid electronic CHEP / Loscam pool transfer slips crediting our pooling account (<span id="sheet-chep-acct-inline">CHEP-SA-904128</span>).</li>
+              <li>Provide written authorization to invoice your corporate trade account directly at the replacement rates (R395 per CHEP / R360 per Loscam) totaling <strong><span id="sheet-total-liability-inline">R 0.00</span></strong>.</li>
+            </ol>
+            <p style="margin-top: var(--space-xs); color: var(--color-red); font-weight: 700;">
+              Failure to resolve this deficit within the specified notice period will result in immediate invoicing with statutory interest and referral to the CHEP South Africa Equipment Audit and Recovery Division.
+            </p>
+          </div>
+
+          <div class="sheet-signatures">
+            <div>
+              <div style="font-size: 0.75rem; color: var(--color-ink-2);">Issued on behalf of dispatch and fleet operations:</div>
+              <div class="sig-line" id="sheet-signatory-name">
+                Bongani Mthembu, Logistics and Fleet Operations Manager
+              </div>
+              <div style="font-size: 0.6875rem; color: var(--color-muted); margin-top: var(--space-2xs);">
+                Depot stamp and date: Verified
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 0.75rem; color: var(--color-ink-2);">Received and acknowledged by customer / DC bay:</div>
+              <div class="sig-line">
+                Customer receiving officer / operations manager signature
+              </div>
+              <div style="font-size: 0.6875rem; color: var(--color-muted); margin-top: var(--space-2xs);">
+                Full name and gate pass stamp: Acknowledged
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- Tab 4: WhatsApp intel -->
+    <div class="tab-pane" id="tab-whatsapp" role="tabpanel">
+      <div class="panel" id="whatsapp-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>WhatsApp dispatch summary generator</span>
+          </div>
+          <div>
+            <span class="form-label">Instant logistics manager intelligence</span>
+          </div>
+        </div>
+        <div class="panel-body">
+          <p style="font-size: 0.8125rem; color: var(--color-ink-2); margin-bottom: var(--space-md);">
+            Dispatch controllers can instantly copy this structured operational alert into depot WhatsApp groups or send directly to linehaul transport managers and receiving bay supervisors.
+          </p>
+
+          <div class="whatsapp-box">
+            <pre class="whatsapp-terminal" id="whatsapp-formatted-text">Generating dispatch report...</pre>
+            
+            <div style="display: flex; gap: var(--space-sm); margin-top: var(--space-md); flex-wrap: wrap;">
+              <button type="button" class="btn btn-primary" id="btn-copy-whatsapp">
+                Copy to WhatsApp
+              </button>
+              <button type="button" class="btn btn-amber" id="btn-open-whatsapp-web">
+                Launch in WhatsApp Web
+              </button>
+              <button type="button" class="btn" id="btn-refresh-whatsapp">
+                Refresh report
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Reconcile modal -->
+  <div class="modal-backdrop" id="modal-reconcile" role="dialog" aria-modal="true" aria-labelledby="modal-reconcile-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-reconcile-title">Reconcile and settle pallet return</span>
+        <button type="button" class="btn btn-sm" id="btn-close-reconcile">Close</button>
+      </div>
+      <form id="reconcile-form">
+        <div class="modal-body">
+          <input type="hidden" id="reconcile-trip-id" value="">
+          <div style="background: var(--color-paper-2); padding: var(--space-sm); border: var(--hair) solid var(--color-ink); margin-bottom: var(--space-sm);">
+            <div><strong>Waybill:</strong> <span id="rec-info-waybill">Not selected</span></div>
+            <div><strong>Customer:</strong> <span id="rec-info-account">Not selected</span></div>
+            <div><strong>Originally delivered:</strong> <span id="rec-info-delivered">0</span> Pallets (<span id="rec-info-equipment">CHEP</span>)</div>
+            <div><strong>Currently owed:</strong> <span id="rec-info-owed" style="color: var(--color-red); font-weight: 800;">0</span> Units (<span id="rec-info-liability">R 0.00</span>)</div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-sm);">
+            <label class="form-label" for="reconcile-additional-returned">Empties brought back today *</label>
+            <input type="number" class="form-input" id="reconcile-additional-returned" min="1" step="1" value="1" required>
+            <span style="font-size: 0.6875rem; color: var(--color-muted); margin-top: var(--space-2xs);">
+              Enter the number of empty pallets the driver has now retrieved from this DC.
+            </span>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-sm);">
+            <label class="form-label" for="reconcile-slip-ref">Return slip or exchange voucher reference *</label>
+            <input type="text" class="form-input" id="reconcile-slip-ref" placeholder="e.g. Cleared via voucher CH-9921 / Security gate stamp" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reconcile-status-choice">Settlement action</label>
+            <select class="form-select" id="reconcile-status-choice">
+              <option value="PARTIAL_RETURN">Record Partial Recovery (Keep Balance Open)</option>
+              <option value="FULL_SETTLEMENT">Mark Fully Settled and Cleared (0 Variance)</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" id="btn-cancel-reconcile">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-confirm-reconcile">Save reconciliation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Settings modal -->
+  <div class="modal-backdrop" id="modal-settings" role="dialog" aria-modal="true" aria-labelledby="modal-settings-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-settings-title">Depot profile and replacement tariffs</span>
+        <button type="button" class="btn btn-sm" id="btn-close-settings">Close</button>
+      </div>
+      <form id="depot-config-form">
+        <div class="modal-body">
+          <div class="form-group" style="margin-bottom: var(--space-xs);">
+            <label class="form-label" for="cfg-depot-name">Depot name *</label>
+            <input type="text" class="form-input" id="cfg-depot-name" value="Wilsonia Logistics and Depot Hub" required>
+          </div>
+          <div class="form-group" style="margin-bottom: var(--space-xs);">
+            <label class="form-label" for="cfg-depot-address">Depot physical address</label>
+            <input type="text" class="form-input" id="cfg-depot-address" value="Peffer Street, Wilsonia Industrial, East London, 5200">
+          </div>
+          <div class="form-group" style="margin-bottom: var(--space-xs);">
+            <label class="form-label" for="cfg-depot-phone">Depot telephone / dispatch hotline</label>
+            <input type="text" class="form-input" id="cfg-depot-phone" value="+27 (0)43 745 1900">
+          </div>
+          <div class="form-group" style="margin-bottom: var(--space-xs);">
+            <label class="form-label" for="cfg-depot-email">Depot e-mail address</label>
+            <input type="email" class="form-input" id="cfg-depot-email" value="dispatch@wilsonialogistics.co.za">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xs); margin-bottom: var(--space-xs);">
+            <div class="form-group">
+              <label class="form-label" for="cfg-chep-account">CHEP account number</label>
+              <input type="text" class="form-input" id="cfg-chep-account" value="CHEP-SA-904128">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cfg-loscam-account">Loscam account number</label>
+              <input type="text" class="form-input" id="cfg-loscam-account" value="LOS-SA-44109">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-xs); margin-bottom: var(--space-xs);">
+            <div class="form-group">
+              <label class="form-label" for="cfg-cost-chep">CHEP cost (ZAR)</label>
+              <input type="number" class="form-input" id="cfg-cost-chep" min="100" step="5" value="395">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cfg-cost-loscam">Loscam cost (ZAR)</label>
+              <input type="number" class="form-input" id="cfg-cost-loscam" min="100" step="5" value="360">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cfg-cost-white">White cost (ZAR)</label>
+              <input type="number" class="form-input" id="cfg-cost-white" min="50" step="5" value="140">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cfg-manager-name">Operations manager signatory</label>
+            <input type="text" class="form-input" id="cfg-manager-name" value="Bongani Mthembu (Logistics and Fleet Operations Manager)">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" id="btn-cancel-settings">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-settings">Save configuration</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <input type="file" id="json-file-input" accept=".json,application/json" style="display: none;">
+  <div id="toast-msg">Action completed</div>
+
+  <!-- JavaScript application logic -->
+  <script>
+    (function () {
+      'use strict';
+
+      const STORAGE_KEY_LEDGER = 'palletlock_v1_ledger_data';
+      const STORAGE_KEY_CONFIG = 'palletlock_v1_depot_config';
+
+      const DEFAULT_CONFIG = {
+        depotName: 'Wilsonia Logistics and Depot Hub',
+        depotAddress: 'Peffer Street, Wilsonia Industrial, East London, 5200',
+        depotPhone: '+27 (0)43 745 1900',
+        depotEmail: 'dispatch@wilsonialogistics.co.za',
+        chepAccount: 'CHEP-SA-904128',
+        loscamAccount: 'LOS-SA-44109',
+        chepCost: 395,
+        loscamCost: 360,
+        whiteCost: 140,
+        managerName: 'Bongani Mthembu (Logistics and Fleet Operations Manager)'
+      };
+
+      function getDateOffset(daysAgo) {
+        const d = new Date();
+        d.setDate(d.getDate() - daysAgo);
+        return d.toISOString().split('T')[0];
+      }
+
+      function getInitialDemoLedger() {
+        return [
+          {
+            id: 'mov-1001',
+            date: getDateOffset(18),
+            shift: 'N2 Coastal Trunk (EL-PE)',
+            waybill: 'WB-88412',
+            account: 'Shoprite DC Wells Estate',
+            vehicle: 'CA 492-104',
+            driver: 'Sipho Ndlovu',
+            equipment: 'CHEP_BLUE',
+            unitCost: 395,
+            delivered: 36,
+            returned: 4,
+            reason: 'DC Exchange Pending',
+            receiverRef: 'Bay 14: Supervisor Mokoena / Slip V-8821',
+            notes: 'DC receiving bay congested; driver released truck without exchange empties.'
+          },
+          {
+            id: 'mov-1002',
+            date: getDateOffset(15),
+            shift: 'Local Cross-Dock',
+            waybill: 'WB-88490',
+            account: 'IDZ Auto Plant East London',
+            vehicle: 'EC 782-901',
+            driver: 'Themba Khumalo',
+            equipment: 'LOSCAM_WOOD',
+            unitCost: 360,
+            delivered: 40,
+            returned: 12,
+            reason: 'IOU Voucher Issued',
+            receiverRef: 'Gate 3 Receiving / IOU Slip L-7740',
+            notes: 'Receiver had zero Loscam empties on hand; issued paper IOU voucher.'
+          },
+          {
+            id: 'mov-1003',
+            date: getDateOffset(11),
+            shift: 'N2 Coastal Trunk (EL-PE)',
+            waybill: 'WB-88730',
+            account: 'Spar Distribution PE / Gqeberha',
+            vehicle: 'CA 601-344',
+            driver: 'Johan van der Merwe',
+            equipment: 'CHEP_BLUE',
+            unitCost: 395,
+            delivered: 30,
+            returned: 6,
+            reason: 'Refused by Receiver',
+            receiverRef: 'Bay 8 Controller / Refusal Stamp SP-0912',
+            notes: 'Receiver claimed pallet balance dispute; refused to load return empties.'
+          },
+          {
+            id: 'mov-1004',
+            date: getDateOffset(8),
+            shift: 'N2 Coastal Trunk (EL-PE)',
+            waybill: 'WB-88914',
+            account: 'Shoprite DC Wells Estate',
+            vehicle: 'CA 882-990',
+            driver: 'Loyiso Goniwe',
+            equipment: 'CHEP_BLUE',
+            unitCost: 395,
+            delivered: 32,
+            returned: 0,
+            reason: 'Bay Congestion - Short Returned',
+            receiverRef: 'Bay 11: Slip EXP-3310',
+            notes: 'Linehaul turnaround priority; driver left before empties bay opened.'
+          },
+          {
+            id: 'mov-1005',
+            date: getDateOffset(4),
+            shift: 'Day Shift Dispatch',
+            waybill: 'WB-89102',
+            account: 'Distell Greenbushes PE',
+            vehicle: 'EC 440-128',
+            driver: 'Mandla Zibi',
+            equipment: 'CHEP_BLUE',
+            unitCost: 395,
+            delivered: 26,
+            returned: 10,
+            reason: 'IOU Voucher Issued',
+            receiverRef: 'Bay 4: Voucher IOU-9941',
+            notes: 'Returned 10 empties; 16 held under pallet exchange slip.'
+          },
+          {
+            id: 'mov-1006',
+            date: getDateOffset(2),
+            shift: 'N6 Inland Trunk (EL-JHB)',
+            waybill: 'WB-89240',
+            account: 'Massmart Distribution City Deep',
+            vehicle: 'GP 221-889',
+            driver: 'Thabo Mokoena',
+            equipment: 'CHEP_BLUE',
+            unitCost: 395,
+            delivered: 34,
+            returned: 14,
+            reason: 'Bay Congestion - Short Returned',
+            receiverRef: 'Bay 22: Inward Slip MS-6612',
+            notes: 'Johannesburg cross-dock return; partial 14 pallets collected.'
+          },
+          {
+            id: 'mov-1007',
+            date: getDateOffset(1),
+            shift: 'Day Shift Dispatch',
+            waybill: 'WB-89380',
+            account: 'Pick n Pay DC Gqeberha',
+            vehicle: 'CA 110-442',
+            driver: 'David Botha',
+            equipment: 'PLAIN_WHITE',
+            unitCost: 140,
+            delivered: 24,
+            returned: 0,
+            reason: 'Refused by Receiver',
+            receiverRef: 'Bay 3: Disputed Export Pallet PNP-1102',
+            notes: 'DC claimed plain white timber quality unacceptable for bay exchange.'
+          },
+          {
+            id: 'mov-1008',
+            date: getDateOffset(0),
+            shift: 'Local Cross-Dock',
+            waybill: 'WB-89455',
+            account: 'Clover Dairies Fort Jackson',
+            vehicle: 'EC 990-231',
+            driver: 'Sipho Ndlovu',
+            equipment: 'CHEP_BLUE',
+            unitCost: 395,
+            delivered: 20,
+            returned: 20,
+            reason: 'Full Exchange Balanced',
+            receiverRef: 'Bay 1: Clean Slip EXC-8831',
+            notes: 'Full 1:1 physical exchange completed at Clover bay without dispute.'
+          }
+        ];
+      }
+
+      let ledger = [];
+      let config = { ...DEFAULT_CONFIG };
+
+      let filterText = '';
+      let filterAccount = 'ALL';
+      let filterEquipment = 'ALL';
+      let filterRisk = 'ALL';
+
+      function loadState() {
+        try {
+          const storedConfig = localStorage.getItem(STORAGE_KEY_CONFIG);
+          if (storedConfig) {
+            config = { ...DEFAULT_CONFIG, ...JSON.parse(storedConfig) };
+          }
+        } catch (e) {
+          config = { ...DEFAULT_CONFIG };
+        }
+
+        try {
+          const storedLedger = localStorage.getItem(STORAGE_KEY_LEDGER);
+          if (storedLedger) {
+            ledger = JSON.parse(storedLedger);
+          } else {
+            ledger = getInitialDemoLedger();
+            saveLedger();
+          }
+        } catch (e) {
+          ledger = getInitialDemoLedger();
+          saveLedger();
+        }
+      }
+
+      function saveLedger() {
+        try {
+          localStorage.setItem(STORAGE_KEY_LEDGER, JSON.stringify(ledger));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      function saveConfig() {
+        try {
+          localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify(config));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      function formatZAR(val) {
+        const num = Number(val) || 0;
+        return 'R ' + num.toLocaleString('en-ZA', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function calculateDaysOld(dateStr) {
+        if (!dateStr) return 0;
+        const entryDate = new Date(dateStr);
+        const today = new Date();
+        const diffMs = today.getTime() - entryDate.getTime();
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        return Math.max(0, diffDays);
+      }
+
+      function getEquipmentLabel(type) {
+        switch (type) {
+          case 'CHEP_BLUE': return 'CHEP Blue Pallet';
+          case 'LOSCAM_WOOD': return 'Loscam Wooden Pallet';
+          case 'PLAIN_WHITE': return 'Plain White / Export';
+          default: return type;
+        }
+      }
+
+      function getEquipmentBadgeClass(type) {
+        switch (type) {
+          case 'CHEP_BLUE': return 'badge-chep';
+          case 'LOSCAM_WOOD': return 'badge-loscam';
+          case 'PLAIN_WHITE': return 'badge-white';
+          default: return '';
+        }
+      }
+
+      function getRiskCategory(days, unreturnedCount) {
+        if (unreturnedCount <= 0) return 'BALANCED';
+        if (days > 14) return 'CRITICAL';
+        if (days >= 7) return 'WARNING';
+        return 'NORMAL';
+      }
+
+      function getRiskBadge(days, unreturnedCount) {
+        if (unreturnedCount <= 0) {
+          return '<span class="badge badge-balanced">Balanced (0)</span>';
+        }
+        if (days > 14) {
+          return '<span class="badge badge-critical" title="Stuck over 14 days">Critical: ' + days + 'd</span>';
+        }
+        if (days >= 7) {
+          return '<span class="badge badge-warning" title="Warning window 7 to 14 days">Warning: ' + days + 'd</span>';
+        }
+        return '<span class="badge badge-normal" title="Normal operational turnaround">Normal: ' + days + 'd</span>';
+      }
+
+      function getDefaultCostForEquipment(eqType) {
+        if (eqType === 'CHEP_BLUE') return config.chepCost;
+        if (eqType === 'LOSCAM_WOOD') return config.loscamCost;
+        if (eqType === 'PLAIN_WHITE') return config.whiteCost;
+        return 395;
+      }
+
+      let toastTimer = null;
+      function showToast(msg) {
+        const el = document.getElementById('toast-msg');
+        if (!el) return;
+        el.textContent = msg;
+        el.style.display = 'block';
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          el.style.display = 'none';
+        }, 2800);
+      }
+
+      function updateKPIs() {
+        let totalDelivered = 0;
+        let totalReturned = 0;
+        let totalUnreturned = 0;
+        let totalLiability = 0;
+        let criticalLiability = 0;
+        let criticalCount = 0;
+        let warningLiability = 0;
+        let warningCount = 0;
+        const accountDeficits = {};
+
+        ledger.forEach(item => {
+          const del = Number(item.delivered) || 0;
+          const ret = Number(item.returned) || 0;
+          const unreturned = Math.max(0, del - ret);
+          const cost = Number(item.unitCost) || getDefaultCostForEquipment(item.equipment);
+          const itemLiability = unreturned * cost;
+          const days = calculateDaysOld(item.date);
+
+          totalDelivered += del;
+          totalReturned += ret;
+          totalUnreturned += unreturned;
+          totalLiability += itemLiability;
+
+          if (unreturned > 0) {
+            accountDeficits[item.account] = (accountDeficits[item.account] || 0) + itemLiability;
+            if (days > 14) {
+              criticalLiability += itemLiability;
+              criticalCount += unreturned;
+            } else if (days >= 7) {
+              warningLiability += itemLiability;
+              warningCount += unreturned;
+            }
+          }
+        });
+
+        const activeAccountsCount = Object.keys(accountDeficits).length;
+        const returnRate = totalDelivered > 0 ? ((totalReturned / totalDelivered) * 100).toFixed(1) : '0.0';
+
+        let topDebtorName = 'None';
+        let maxDebtorVal = 0;
+        Object.entries(accountDeficits).forEach(([acc, val]) => {
+          if (val > maxDebtorVal) {
+            maxDebtorVal = val;
+            topDebtorName = acc + ' (' + formatZAR(val) + ')';
+          }
+        });
+
+        const elTotalLiability = document.getElementById('kpi-total-liability');
+        const elSubAccounts = document.getElementById('kpi-sub-accounts');
+        const elTotalUnreturned = document.getElementById('kpi-total-unreturned');
+        const elCriticalLiability = document.getElementById('kpi-critical-liability');
+        const elCriticalCount = document.getElementById('kpi-critical-count');
+        const elRecoveryRate = document.getElementById('kpi-recovery-rate');
+        const elTotalTrips = document.getElementById('kpi-total-trips');
+
+        if (elTotalLiability) elTotalLiability.textContent = formatZAR(totalLiability);
+        if (elSubAccounts) elSubAccounts.textContent = activeAccountsCount + ' Active Receivers';
+        if (elTotalUnreturned) elTotalUnreturned.textContent = totalUnreturned.toLocaleString() + ' UNITS';
+        if (elCriticalLiability) elCriticalLiability.textContent = formatZAR(criticalLiability);
+        if (elCriticalCount) elCriticalCount.textContent = criticalCount + ' Overdue Units';
+        if (elRecoveryRate) elRecoveryRate.textContent = returnRate + '%';
+        if (elTotalTrips) elTotalTrips.textContent = ledger.length + ' Total Movements';
+
+        const elStripDelivered = document.getElementById('strip-total-delivered');
+        const elStripReturned = document.getElementById('strip-total-returned');
+        const elStripWarning = document.getElementById('strip-warning-liability');
+        const elStripTopDebtor = document.getElementById('strip-top-debtor');
+        const elStripChepAccount = document.getElementById('strip-chep-account');
+
+        if (elStripDelivered) elStripDelivered.textContent = totalDelivered.toLocaleString() + ' Units';
+        if (elStripReturned) elStripReturned.textContent = totalReturned.toLocaleString() + ' Units';
+        if (elStripWarning) elStripWarning.textContent = formatZAR(warningLiability) + ' (' + warningCount + ' Units)';
+        if (elStripTopDebtor) elStripTopDebtor.textContent = topDebtorName;
+        if (elStripChepAccount) elStripChepAccount.textContent = config.chepAccount;
+
+        const elNavDepot = document.getElementById('nav-depot-label');
+        if (elNavDepot) elNavDepot.textContent = 'Depot: ' + config.depotName;
+
+        const elTabLedgerCount = document.getElementById('tab-counter-ledger');
+        const elTabAccountsCount = document.getElementById('tab-counter-accounts');
+        if (elTabLedgerCount) elTabLedgerCount.textContent = ledger.length;
+        if (elTabAccountsCount) elTabAccountsCount.textContent = activeAccountsCount;
+      }
+
+      function renderLedgerTable() {
+        const tbody = document.getElementById('ledger-tbody');
+        if (!tbody) return;
+
+        const filterAccSelect = document.getElementById('filter-account');
+        if (filterAccSelect) {
+          const currentVal = filterAccSelect.value;
+          const accountsSet = new Set();
+          ledger.forEach(i => accountsSet.add(i.account));
+          const sortedAccounts = Array.from(accountsSet).sort();
+
+          let optionsHtml = '<option value="ALL">All DC Accounts</option>';
+          sortedAccounts.forEach(acc => {
+            optionsHtml += '<option value="' + escapeHtml(acc) + '">' + escapeHtml(acc) + '</option>';
+          });
+          filterAccSelect.innerHTML = optionsHtml;
+          filterAccSelect.value = sortedAccounts.includes(currentVal) ? currentVal : 'ALL';
+        }
+
+        const q = filterText.trim().toLowerCase();
+        const filtered = ledger.filter(item => {
+          if (q) {
+            const searchStr = (item.waybill + ' ' + item.account + ' ' + item.driver + ' ' + item.vehicle + ' ' + item.receiverRef + ' ' + item.reason).toLowerCase();
+            if (!searchStr.includes(q)) return false;
+          }
+          if (filterAccount !== 'ALL' && item.account !== filterAccount) return false;
+          if (filterEquipment !== 'ALL' && item.equipment !== filterEquipment) return false;
+          if (filterRisk !== 'ALL') {
+            const del = Number(item.delivered) || 0;
+            const ret = Number(item.returned) || 0;
+            const unreturned = Math.max(0, del - ret);
+            const days = calculateDaysOld(item.date);
+            const cat = getRiskCategory(days, unreturned);
+            if (cat !== filterRisk) return false;
+          }
+          return true;
+        });
+
+        filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const countLabel = document.getElementById('filter-count-label');
+        if (countLabel) {
+          countLabel.textContent = 'Showing ' + filtered.length + ' / ' + ledger.length + ' Trips';
+        }
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding: 2rem; color: var(--color-muted);">' +
+            'No pallet movement records match the active filters.</td></tr>';
+          updateFooterTotals(0, 0, 0, 0);
+          return;
+        }
+
+        let html = '';
+        let sumDel = 0;
+        let sumRet = 0;
+        let sumOwed = 0;
+        let sumLiab = 0;
+
+        filtered.forEach(item => {
+          const del = Number(item.delivered) || 0;
+          const ret = Number(item.returned) || 0;
+          const unreturned = Math.max(0, del - ret);
+          const cost = Number(item.unitCost) || getDefaultCostForEquipment(item.equipment);
+          const liability = unreturned * cost;
+          const days = calculateDaysOld(item.date);
+          const isCritical = unreturned > 0 && days > 14;
+
+          sumDel += del;
+          sumRet += ret;
+          sumOwed += unreturned;
+          sumLiab += liability;
+
+          const rowClass = isCritical ? 'row-critical' : '';
+          const eqBadge = '<span class="badge ' + getEquipmentBadgeClass(item.equipment) + '">' + escapeHtml(getEquipmentLabel(item.equipment)) + '</span>';
+          const riskBadge = getRiskBadge(days, unreturned);
+
+          html += '<tr class="' + rowClass + '" data-id="' + escapeHtml(item.id) + '">' +
+            '<td><strong>' + escapeHtml(item.date) + '</strong><br><span style="font-size:0.6875rem; color:var(--color-muted);">' + escapeHtml(item.shift || 'Dispatch') + '</span></td>' +
+            '<td><strong style="color:var(--color-accent);">' + escapeHtml(item.waybill) + '</strong></td>' +
+            '<td><strong>' + escapeHtml(item.account) + '</strong></td>' +
+            '<td>' + escapeHtml(item.vehicle || '(Vehicle)') + '<br><span style="font-size:0.6875rem; color:var(--color-muted);">' + escapeHtml(item.driver || '(Driver)') + '</span></td>' +
+            '<td>' + eqBadge + '</td>' +
+            '<td><strong>' + del + '</strong> Del / ' + ret + ' Ret<br>' +
+              (unreturned > 0 ? '<strong style="color:var(--color-red);">+' + unreturned + ' Owed</strong>' : '<span style="color:var(--color-green); font-weight:700;">Balanced</span>') +
+            '</td>' +
+            '<td><span style="font-weight:700;">' + escapeHtml(item.reason) + '</span><br><span style="font-size:0.6875rem; color:var(--color-muted);">' + escapeHtml(item.receiverRef || 'No slip ref') + '</span></td>' +
+            '<td>' + riskBadge + '</td>' +
+            '<td><strong style="font-size:0.95rem;">' + formatZAR(liability) + '</strong><br><span style="font-size:0.625rem; color:var(--color-muted);">' + formatZAR(cost) + '/unit</span></td>' +
+            '<td style="text-align: right;">' +
+              '<div style="display: inline-flex; gap: var(--space-xs);">' +
+                (unreturned > 0 ? '<button type="button" class="btn btn-sm btn-primary action-btn-reconcile" data-id="' + escapeHtml(item.id) + '" title="Reconcile returned empties">Reconcile</button>' : '') +
+                '<button type="button" class="btn btn-sm action-btn-edit" data-id="' + escapeHtml(item.id) + '" title="Edit movement details">Edit</button>' +
+                '<button type="button" class="btn btn-sm btn-red action-btn-delete" data-id="' + escapeHtml(item.id) + '" title="Delete ticket">Delete</button>' +
+              '</div>' +
+            '</td>' +
+          '</tr>';
+        });
+
+        tbody.innerHTML = html;
+        updateFooterTotals(sumDel, sumRet, sumOwed, sumLiab);
+      }
+
+      function updateFooterTotals(del, ret, owed, liab) {
+        const elCounts = document.getElementById('tfoot-totals-counts');
+        const elLiability = document.getElementById('tfoot-totals-liability');
+        if (elCounts) elCounts.textContent = del + ' Del / ' + ret + ' Ret = ' + owed + ' Owed';
+        if (elLiability) elLiability.textContent = formatZAR(liab);
+      }
+
+      function renderAccountsMatrix() {
+        const cardsContainer = document.getElementById('account-cards-container');
+        const tbody = document.getElementById('accounts-tbody');
+        if (!cardsContainer || !tbody) return;
+
+        const accMap = {};
+
+        ledger.forEach(item => {
+          if (!accMap[item.account]) {
+            accMap[item.account] = {
+              name: item.account,
+              tripsCount: 0,
+              chepOwed: 0,
+              loscamOwed: 0,
+              whiteOwed: 0,
+              totalOwed: 0,
+              totalLiability: 0,
+              oldestDays: 0,
+              normalCount: 0,
+              warningCount: 0,
+              criticalCount: 0
+            };
+          }
+
+          const acc = accMap[item.account];
+          acc.tripsCount++;
+
+          const del = Number(item.delivered) || 0;
+          const ret = Number(item.returned) || 0;
+          const unreturned = Math.max(0, del - ret);
+          const cost = Number(item.unitCost) || getDefaultCostForEquipment(item.equipment);
+          const liab = unreturned * cost;
+          const days = calculateDaysOld(item.date);
+
+          if (unreturned > 0) {
+            acc.totalOwed += unreturned;
+            acc.totalLiability += liab;
+            if (days > acc.oldestDays) acc.oldestDays = days;
+
+            if (item.equipment === 'CHEP_BLUE') acc.chepOwed += unreturned;
+            else if (item.equipment === 'LOSCAM_WOOD') acc.loscamOwed += unreturned;
+            else if (item.equipment === 'PLAIN_WHITE') acc.whiteOwed += unreturned;
+
+            if (days > 14) acc.criticalCount += unreturned;
+            else if (days >= 7) acc.warningCount += unreturned;
+            else acc.normalCount += unreturned;
+          }
+        });
+
+        const accountsList = Object.values(accMap);
+        accountsList.sort((a, b) => b.totalLiability - a.totalLiability);
+
+        if (accountsList.length === 0) {
+          cardsContainer.innerHTML = '<div style="color:var(--color-muted); padding:2rem;">No accounts on record.</div>';
+          tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:2rem;">No accounts on record.</td></tr>';
+          return;
+        }
+
+        let cardsHtml = '';
+        let tableHtml = '';
+
+        accountsList.forEach(acc => {
+          const riskCat = getRiskCategory(acc.oldestDays, acc.totalOwed);
+          let riskBadge = '';
+          if (acc.totalOwed === 0) riskBadge = '<span class="badge badge-balanced">Balanced (0)</span>';
+          else if (riskCat === 'CRITICAL') riskBadge = '<span class="badge badge-critical">Critical (&gt;14d)</span>';
+          else if (riskCat === 'WARNING') riskBadge = '<span class="badge badge-warning">Warning (7-14d)</span>';
+          else riskBadge = '<span class="badge badge-normal">Normal (&lt;7d)</span>';
+
+          const totalUnits = acc.totalOwed > 0 ? acc.totalOwed : 1;
+          const pctNorm = ((acc.normalCount / totalUnits) * 100).toFixed(1);
+          const pctWarn = ((acc.warningCount / totalUnits) * 100).toFixed(1);
+          const pctCrit = ((acc.criticalCount / totalUnits) * 100).toFixed(1);
+
+          cardsHtml += '<div class="account-card">' +
+            '<div>' +
+              '<div class="account-card-header">' +
+                '<div>' +
+                  '<div class="account-name">' + escapeHtml(acc.name) + '</div>' +
+                  '<div class="account-trips-count">' + acc.tripsCount + ' Dispatched Trips</div>' +
+                '</div>' +
+                '<div>' + riskBadge + '</div>' +
+              '</div>' +
+              '<div class="account-stat-matrix" style="margin-top:var(--space-sm);">' +
+                '<div class="account-metric-cell">' +
+                  '<div class="cell-label">CHEP Blue</div>' +
+                  '<div class="cell-val" style="color:var(--color-chep);">' + acc.chepOwed + '</div>' +
+                '</div>' +
+                '<div class="account-metric-cell">' +
+                  '<div class="cell-label">Loscam Wood</div>' +
+                  '<div class="cell-val" style="color:var(--color-loscam);">' + acc.loscamOwed + '</div>' +
+                '</div>' +
+                '<div class="account-metric-cell">' +
+                  '<div class="cell-label">White / Exp</div>' +
+                  '<div class="cell-val">' + acc.whiteOwed + '</div>' +
+                '</div>' +
+              '</div>' +
+              '<div style="margin-top:var(--space-xs);">' +
+                '<div style="display:flex; justify-content:space-between; font-size:0.6875rem;">' +
+                  '<span style="font-weight:700;">Aging Exposure Profile</span>' +
+                  '<span style="color:var(--color-muted);">Oldest: ' + acc.oldestDays + ' Days</span>' +
+                '</div>' +
+                '<div class="aging-progress-bar">' +
+                  '<div class="aging-seg-normal" style="width:' + pctNorm + '%;" title="Normal: ' + acc.normalCount + '"></div>' +
+                  '<div class="aging-seg-warning" style="width:' + pctWarn + '%;" title="Warning: ' + acc.warningCount + '"></div>' +
+                  '<div class="aging-seg-critical" style="width:' + pctCrit + '%;" title="Critical: ' + acc.criticalCount + '"></div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div>' +
+              '<div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:var(--hair) solid var(--color-rule); padding-top:var(--space-sm); margin-top:var(--space-sm);">' +
+                '<div>' +
+                  '<div style="font-size:0.6875rem; color:var(--color-muted); font-weight:700;">Total asset risk:</div>' +
+                  '<div style="font-size:1.15rem; font-weight:800; color:var(--color-red);">' + formatZAR(acc.totalLiability) + '</div>' +
+                '</div>' +
+                '<button type="button" class="btn btn-sm btn-primary action-account-demand" data-account="' + escapeHtml(acc.name) + '">' +
+                  'Demand notice' +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+
+          tableHtml += '<tr>' +
+            '<td><strong>' + escapeHtml(acc.name) + '</strong></td>' +
+            '<td><span style="color:var(--color-chep); font-weight:700;">' + acc.chepOwed + '</span></td>' +
+            '<td><span style="color:var(--color-loscam); font-weight:700;">' + acc.loscamOwed + '</span></td>' +
+            '<td>' + acc.whiteOwed + '</td>' +
+            '<td><strong style="color:var(--color-red);">' + acc.totalOwed + '</strong></td>' +
+            '<td>' + acc.oldestDays + ' Days</td>' +
+            '<td>' + riskBadge + '</td>' +
+            '<td><strong>' + formatZAR(acc.totalLiability) + '</strong></td>' +
+            '<td style="text-align: right;">' +
+              '<button type="button" class="btn btn-sm btn-primary action-account-demand" data-account="' + escapeHtml(acc.name) + '">Generate demand</button>' +
+            '</td>' +
+          '</tr>';
+        });
+
+        cardsContainer.innerHTML = cardsHtml;
+        tbody.innerHTML = tableHtml;
+      }
+
+      function renderDemandNotice(selectedAccount) {
+        const selectEl = document.getElementById('demand-target-account');
+        if (!selectEl) return;
+
+        const accountsWithDeficit = new Set();
+        ledger.forEach(i => {
+          const unreturned = Math.max(0, (Number(i.delivered) || 0) - (Number(i.returned) || 0));
+          if (unreturned > 0) accountsWithDeficit.add(i.account);
+        });
+
+        const sorted = Array.from(accountsWithDeficit).sort();
+        let selHtml = '';
+        sorted.forEach(acc => {
+          selHtml += '<option value="' + escapeHtml(acc) + '">' + escapeHtml(acc) + '</option>';
+        });
+        selectEl.innerHTML = selHtml;
+
+        if (sorted.length === 0) {
+          selectEl.innerHTML = '<option value="">No Accounts with Outstanding Pallets</option>';
+        }
+
+        const targetAccount = selectedAccount && sorted.includes(selectedAccount)
+          ? selectedAccount
+          : (sorted[0] || '');
+
+        selectEl.value = targetAccount;
+        updateDemandLetterContent(targetAccount);
+      }
+
+      function updateDemandLetterContent(targetAccount) {
+        const letterTbody = document.getElementById('sheet-table-tbody');
+        const letterDepotTitle = document.getElementById('sheet-depot-title');
+        const letterDepotAddress = document.getElementById('sheet-depot-address');
+        const letterChepAcct = document.getElementById('sheet-chep-acct');
+        const letterLoscamAcct = document.getElementById('sheet-loscam-acct');
+        const letterDateVal = document.getElementById('sheet-date-val');
+        const letterRefVal = document.getElementById('sheet-ref-val');
+        const letterTargetCustomer = document.getElementById('sheet-target-customer');
+        const letterTotalPallets = document.getElementById('sheet-total-pallets');
+        const letterTotalLiability = document.getElementById('sheet-total-liability');
+        const letterTotalLiabilityInline = document.getElementById('sheet-total-liability-inline');
+        const letterChepInline = document.getElementById('sheet-chep-acct-inline');
+        const letterUltimatum = document.getElementById('sheet-ultimatum-text');
+        const letterSignatory = document.getElementById('sheet-signatory-name');
+
+        if (!letterTbody) return;
+
+        if (letterDepotTitle) letterDepotTitle.textContent = config.depotName;
+        if (letterDepotAddress) letterDepotAddress.textContent = config.depotAddress + ', Tel: ' + config.depotPhone + ', ' + config.depotEmail;
+        if (letterChepAcct) letterChepAcct.textContent = config.chepAccount;
+        if (letterLoscamAcct) letterLoscamAcct.textContent = config.loscamAccount;
+        if (letterChepInline) letterChepInline.textContent = config.chepAccount;
+
+        const todayStr = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
+        if (letterDateVal) letterDateVal.textContent = todayStr;
+        const refInput = document.getElementById('demand-ref-number');
+        if (letterRefVal && refInput) letterRefVal.textContent = refInput.value || 'REC-DEMAND-2026-092';
+
+        const ultimatumSelect = document.getElementById('demand-ultimatum');
+        if (letterUltimatum && ultimatumSelect) letterUltimatum.textContent = ultimatumSelect.value;
+
+        const signatoryInput = document.getElementById('demand-signatory');
+        if (letterSignatory && signatoryInput) letterSignatory.textContent = signatoryInput.value;
+
+        if (letterTargetCustomer) letterTargetCustomer.textContent = targetAccount || '(None Selected)';
+
+        if (!targetAccount) {
+          letterTbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:1.5rem;">Please select an account with outstanding equipment balance.</td></tr>';
+          if (letterTotalPallets) letterTotalPallets.textContent = '0 Units';
+          if (letterTotalLiability) letterTotalLiability.textContent = 'R 0.00';
+          if (letterTotalLiabilityInline) letterTotalLiabilityInline.textContent = 'R 0.00';
+          return;
+        }
+
+        const items = ledger.filter(i => {
+          if (i.account !== targetAccount) return false;
+          const unreturned = Math.max(0, (Number(i.delivered) || 0) - (Number(i.returned) || 0));
+          return unreturned > 0;
+        });
+
+        items.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        let rowsHtml = '';
+        let totUnreturned = 0;
+        let totLiability = 0;
+
+        items.forEach(item => {
+          const del = Number(item.delivered) || 0;
+          const ret = Number(item.returned) || 0;
+          const unreturned = del - ret;
+          const cost = Number(item.unitCost) || getDefaultCostForEquipment(item.equipment);
+          const liab = unreturned * cost;
+
+          totUnreturned += unreturned;
+          totLiability += liab;
+
+          rowsHtml += '<tr>' +
+            '<td>' + escapeHtml(item.date) + '</td>' +
+            '<td><strong>' + escapeHtml(item.waybill) + '</strong></td>' +
+            '<td>' + escapeHtml((item.vehicle || '') + ' (' + (item.driver || '') + ')') + '</td>' +
+            '<td>' + escapeHtml(getEquipmentLabel(item.equipment)) + '</td>' +
+            '<td>' + del + '</td>' +
+            '<td>' + ret + '</td>' +
+            '<td style="font-weight:800; color:var(--color-red);">+' + unreturned + '</td>' +
+            '<td>' + formatZAR(cost) + '</td>' +
+            '<td><strong>' + formatZAR(liab) + '</strong></td>' +
+          '</tr>';
+        });
+
+        letterTbody.innerHTML = rowsHtml;
+        if (letterTotalPallets) letterTotalPallets.textContent = totUnreturned.toLocaleString() + ' Units';
+        if (letterTotalLiability) letterTotalLiability.textContent = formatZAR(totLiability);
+        if (letterTotalLiabilityInline) letterTotalLiabilityInline.textContent = formatZAR(totLiability);
+      }
+
+      function renderWhatsAppSummary() {
+        const terminal = document.getElementById('whatsapp-formatted-text');
+        if (!terminal) return;
+
+        let totalDelivered = 0;
+        let totalReturned = 0;
+        let totalUnreturned = 0;
+        let totalLiability = 0;
+        let criticalLiability = 0;
+        let criticalUnits = 0;
+        const accountMap = {};
+
+        ledger.forEach(item => {
+          const del = Number(item.delivered) || 0;
+          const ret = Number(item.returned) || 0;
+          const unreturned = Math.max(0, del - ret);
+          const cost = Number(item.unitCost) || getDefaultCostForEquipment(item.equipment);
+          const liab = unreturned * cost;
+          const days = calculateDaysOld(item.date);
+
+          totalDelivered += del;
+          totalReturned += ret;
+          totalUnreturned += unreturned;
+          totalLiability += liab;
+
+          if (unreturned > 0) {
+            if (!accountMap[item.account]) {
+              accountMap[item.account] = {
+                name: item.account,
+                chep: 0,
+                loscam: 0,
+                white: 0,
+                total: 0,
+                liability: 0,
+                oldest: 0
+              };
+            }
+            const acc = accountMap[item.account];
+            acc.total += unreturned;
+            acc.liability += liab;
+            if (days > acc.oldest) acc.oldest = days;
+            if (item.equipment === 'CHEP_BLUE') acc.chep += unreturned;
+            else if (item.equipment === 'LOSCAM_WOOD') acc.loscam += unreturned;
+            else if (item.equipment === 'PLAIN_WHITE') acc.white += unreturned;
+
+            if (days > 14) {
+              criticalLiability += liab;
+              criticalUnits += unreturned;
+            }
+          }
+        });
+
+        const sortedAccounts = Object.values(accountMap).sort((a, b) => b.liability - a.liability);
+        const todayStr = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' });
+
+        let msg = '*PALLETLOCK DISPATCH AUDIT: UNRETURNED PALLET ALERT*\n';
+        msg += 'Date: ' + todayStr + ' | Depot: ' + config.depotName + '\n';
+        msg += 'CHEP Pool Acct: ' + config.chepAccount + '\n';
+        msg += '--------------------------------------------------\n';
+        msg += '*SUMMARY OVERVIEW*\n';
+        msg += '• Total Pallets Delivered: ' + totalDelivered.toLocaleString() + '\n';
+        msg += '• Empties Brought Back: ' + totalReturned.toLocaleString() + '\n';
+        msg += '• *Net Deficit In Circulation:* ' + totalUnreturned.toLocaleString() + ' Pallets\n';
+        msg += '• *Total Capital Exposure:* ' + formatZAR(totalLiability) + '\n';
+        msg += '• *Critical Risk (>14 Days):* ' + criticalUnits + ' Units (' + formatZAR(criticalLiability) + ')\n';
+        msg += '--------------------------------------------------\n';
+        msg += '*TOP RECEIVING LIABILITIES BY DC:*\n';
+
+        if (sortedAccounts.length === 0) {
+          msg += 'Zero outstanding pallet deficit across all receivers.\n';
+        } else {
+          sortedAccounts.forEach((acc, idx) => {
+            let riskTier = 'NORMAL';
+            if (acc.oldest > 14) riskTier = 'CRITICAL';
+            else if (acc.oldest >= 7) riskTier = 'WARNING';
+
+            msg += (idx + 1) + '. *' + acc.name + '*\n';
+            msg += '   • Total Owed: ' + acc.total + ' Pallets (' + formatZAR(acc.liability) + ')\n';
+            msg += '   • Breakdown: ' + acc.chep + ' CHEP | ' + acc.loscam + ' Loscam | ' + acc.white + ' White\n';
+            msg += '   • Oldest Ticket: ' + acc.oldest + ' Days [' + riskTier + ']\n';
+          });
+        }
+
+        msg += '--------------------------------------------------\n';
+        msg += '*ACTION MANDATE FOR DISPATCH CONTROLLERS:*\n';
+        msg += '1. Drivers on linehaul routes must demand physical 1:1 return empties before offloading.\n';
+        msg += '2. Accounts over 14 days have formal Demand Notices triggered for immediate debit.\n';
+        msg += '3. Do not accept paper IOU vouchers without signed bay manager stamps.\n';
+        msg += '--------------------------------------------------\n';
+        msg += 'Generated by PALLETLOCK V1 · ZAInnovate Technologies';
+
+        terminal.textContent = msg;
+      }
+
+      function updateEntryPreview() {
+        const delInput = document.getElementById('entry-delivered');
+        const retInput = document.getElementById('entry-returned');
+        const eqInput = document.getElementById('entry-equipment');
+        const costInput = document.getElementById('entry-unit-cost');
+
+        const previewVariance = document.getElementById('calc-preview-variance');
+        const previewLiability = document.getElementById('calc-preview-liability');
+        const previewEquipment = document.getElementById('calc-preview-equipment');
+
+        const del = Number(delInput ? delInput.value : 0) || 0;
+        const ret = Number(retInput ? retInput.value : 0) || 0;
+        const variance = Math.max(0, del - ret);
+
+        const eqType = eqInput ? eqInput.value : 'CHEP_BLUE';
+        const cost = Number(costInput ? costInput.value : 0) || getDefaultCostForEquipment(eqType);
+        const liab = variance * cost;
+
+        if (previewVariance) {
+          previewVariance.textContent = (del - ret >= 0 ? '+' : '') + (del - ret) + ' Pallets';
+          previewVariance.className = variance > 0 ? 'calc-val val-amber' : 'calc-val val-green';
+        }
+        if (previewLiability) {
+          previewLiability.textContent = formatZAR(liab);
+          previewLiability.className = liab > 0 ? 'calc-val val-red' : 'calc-val val-green';
+        }
+        if (previewEquipment) {
+          previewEquipment.textContent = getEquipmentLabel(eqType);
+        }
+      }
+
+      function exportCSV() {
+        if (ledger.length === 0) {
+          alert('No ledger records to export.');
+          return;
+        }
+
+        const headers = [
+          'MovementID',
+          'Date',
+          'Shift',
+          'Waybill',
+          'AccountName',
+          'VehicleReg',
+          'DriverName',
+          'EquipmentType',
+          'Delivered',
+          'Returned',
+          'UnreturnedOwed',
+          'UnitCostZAR',
+          'LiabilityZAR',
+          'ReasonCode',
+          'ReceiverSlipRef',
+          'DaysOutstanding',
+          'RiskBracket',
+          'Notes'
+        ];
+
+        const rows = [headers.join(',')];
+
+        ledger.forEach(item => {
+          const del = Number(item.delivered) || 0;
+          const ret = Number(item.returned) || 0;
+          const unreturned = Math.max(0, del - ret);
+          const cost = Number(item.unitCost) || getDefaultCostForEquipment(item.equipment);
+          const liab = unreturned * cost;
+          const days = calculateDaysOld(item.date);
+          const risk = getRiskCategory(days, unreturned);
+
+          const escapeCsv = (str) => '"' + String(str || '').replace(/"/g, '""') + '"';
+
+          const row = [
+            escapeCsv(item.id),
+            escapeCsv(item.date),
+            escapeCsv(item.shift),
+            escapeCsv(item.waybill),
+            escapeCsv(item.account),
+            escapeCsv(item.vehicle),
+            escapeCsv(item.driver),
+            escapeCsv(item.equipment),
+            del,
+            ret,
+            unreturned,
+            cost,
+            liab.toFixed(2),
+            escapeCsv(item.reason),
+            escapeCsv(item.receiverRef),
+            days,
+            escapeCsv(risk),
+            escapeCsv(item.notes)
+          ];
+          rows.push(row.join(','));
+        });
+
+        const csvContent = '\uFEFF' + rows.join('\r\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const dateTag = new Date().toISOString().split('T')[0];
+        a.href = url;
+        a.download = 'PALLETLOCK_Ledger_Export_' + dateTag + '.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('CSV export downloaded');
+      }
+
+      function backupJSON() {
+        const payload = {
+          version: '1.0.0',
+          exportedAt: new Date().toISOString(),
+          config: config,
+          ledger: ledger
+        };
+
+        const jsonStr = JSON.stringify(payload, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const dateTag = new Date().toISOString().split('T')[0];
+        a.href = url;
+        a.download = 'PALLETLOCK_Backup_' + dateTag + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('JSON backup downloaded');
+      }
+
+      function handleJSONImport(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            const data = JSON.parse(e.target.result);
+            if (Array.isArray(data)) {
+              ledger = data;
+            } else if (data.ledger && Array.isArray(data.ledger)) {
+              ledger = data.ledger;
+              if (data.config) config = { ...DEFAULT_CONFIG, ...data.config };
+            } else {
+              throw new Error('Unrecognized JSON ledger format');
+            }
+            saveLedger();
+            saveConfig();
+            refreshAllViews();
+            showToast('Ledger restored from JSON');
+          } catch (err) {
+            alert('Failed to import JSON file: ' + err.message);
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      function switchTab(targetTabId) {
+        const buttons = [
+          { id: 'tab-btn-ledger', pane: 'tab-ledger' },
+          { id: 'tab-btn-accounts', pane: 'tab-accounts' },
+          { id: 'tab-btn-demand', pane: 'tab-demand' },
+          { id: 'tab-btn-whatsapp', pane: 'tab-whatsapp' }
+        ];
+
+        buttons.forEach(tab => {
+          const btn = document.getElementById(tab.id);
+          const pane = document.getElementById(tab.pane);
+          if (tab.pane === targetTabId) {
+            if (btn) {
+              btn.classList.add('active');
+              btn.setAttribute('aria-selected', 'true');
+            }
+            if (pane) {
+              pane.classList.add('active');
+            }
+          } else {
+            if (btn) {
+              btn.classList.remove('active');
+              btn.setAttribute('aria-selected', 'false');
+            }
+            if (pane) {
+              pane.classList.remove('active');
+            }
+          }
+        });
+
+        if (targetTabId === 'tab-accounts') {
+          renderAccountsMatrix();
+        } else if (targetTabId === 'tab-demand') {
+          renderDemandNotice();
+        } else if (targetTabId === 'tab-whatsapp') {
+          renderWhatsAppSummary();
+        }
+      }
+
+      function refreshAllViews() {
+        updateKPIs();
+        renderLedgerTable();
+        renderAccountsMatrix();
+        renderDemandNotice();
+        renderWhatsAppSummary();
+      }
+
+      function startEdit(id) {
+        const item = ledger.find(i => i.id === id);
+        if (!item) return;
+
+        switchTab('tab-ledger');
+
+        document.getElementById('entry-edit-id').value = item.id;
+        document.getElementById('entry-account').value = item.account;
+        document.getElementById('entry-equipment').value = item.equipment;
+        document.getElementById('entry-waybill').value = item.waybill;
+        document.getElementById('entry-date').value = item.date;
+        document.getElementById('entry-vehicle').value = item.vehicle || '';
+        document.getElementById('entry-driver').value = item.driver || '';
+        document.getElementById('entry-shift').value = item.shift || 'Day Shift Dispatch';
+        document.getElementById('entry-delivered').value = item.delivered;
+        document.getElementById('entry-returned').value = item.returned;
+        document.getElementById('entry-unit-cost').value = item.unitCost || getDefaultCostForEquipment(item.equipment);
+        document.getElementById('entry-reason').value = item.reason;
+        document.getElementById('entry-receiver-ref').value = item.receiverRef || '';
+        document.getElementById('entry-notes').value = item.notes || '';
+
+        const submitBtn = document.getElementById('btn-submit-entry');
+        const cancelBtn = document.getElementById('btn-cancel-edit');
+        if (submitBtn) submitBtn.textContent = 'Update pallet record';
+        if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+
+        updateEntryPreview();
+        const entryPanel = document.getElementById('entry-panel');
+        if (entryPanel) entryPanel.scrollIntoView({ behavior: 'smooth' });
+        showToast('Editing trip: ' + item.waybill);
+      }
+
+      function cancelEdit() {
+        document.getElementById('pallet-entry-form').reset();
+        document.getElementById('entry-edit-id').value = '';
+        document.getElementById('entry-date').value = new Date().toISOString().split('T')[0];
+        document.getElementById('entry-equipment').value = 'CHEP_BLUE';
+        document.getElementById('entry-unit-cost').value = config.chepCost;
+
+        const submitBtn = document.getElementById('btn-submit-entry');
+        const cancelBtn = document.getElementById('btn-cancel-edit');
+        if (submitBtn) submitBtn.textContent = 'Log pallet movement';
+        if (cancelBtn) cancelBtn.style.display = 'none';
+
+        updateEntryPreview();
+      }
+
+      function deleteTicket(id) {
+        const item = ledger.find(i => i.id === id);
+        if (!item) return;
+
+        const confirmed = confirm('Are you sure you want to delete waybill entry ' + item.waybill + ' (' + item.account + ')?');
+        if (!confirmed) return;
+
+        ledger = ledger.filter(i => i.id !== id);
+        saveLedger();
+        refreshAllViews();
+        showToast('Deleted ticket ' + item.waybill);
+      }
+
+      function openReconcileModal(id) {
+        const item = ledger.find(i => i.id === id);
+        if (!item) return;
+
+        const del = Number(item.delivered) || 0;
+        const ret = Number(item.returned) || 0;
+        const unreturned = Math.max(0, del - ret);
+        const cost = Number(item.unitCost) || getDefaultCostForEquipment(item.equipment);
+        const liab = unreturned * cost;
+
+        document.getElementById('reconcile-trip-id').value = item.id;
+        document.getElementById('rec-info-waybill').textContent = item.waybill;
+        document.getElementById('rec-info-account').textContent = item.account;
+        document.getElementById('rec-info-delivered').textContent = del;
+        document.getElementById('rec-info-equipment').textContent = getEquipmentLabel(item.equipment);
+        document.getElementById('rec-info-owed').textContent = unreturned;
+        document.getElementById('rec-info-liability').textContent = formatZAR(liab);
+
+        const addRetInput = document.getElementById('reconcile-additional-returned');
+        if (addRetInput) {
+          addRetInput.max = unreturned;
+          addRetInput.value = unreturned;
+        }
+
+        document.getElementById('reconcile-slip-ref').value = '';
+        document.getElementById('reconcile-status-choice').value = 'FULL_SETTLEMENT';
+
+        const modal = document.getElementById('modal-reconcile');
+        if (modal) modal.classList.add('open');
+      }
+
+      function closeReconcileModal() {
+        const modal = document.getElementById('modal-reconcile');
+        if (modal) modal.classList.remove('open');
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        loadState();
+
+        const dateInput = document.getElementById('entry-date');
+        if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+
+        const eqSelect = document.getElementById('entry-equipment');
+        const costInput = document.getElementById('entry-unit-cost');
+        if (eqSelect && costInput) {
+          eqSelect.addEventListener('change', function () {
+            costInput.value = getDefaultCostForEquipment(eqSelect.value);
+            updateEntryPreview();
+          });
+        }
+
+        const liveInputs = ['entry-delivered', 'entry-returned', 'entry-unit-cost'];
+        liveInputs.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.addEventListener('input', updateEntryPreview);
+        });
+
+        document.getElementById('tab-btn-ledger').addEventListener('click', () => switchTab('tab-ledger'));
+        document.getElementById('tab-btn-accounts').addEventListener('click', () => switchTab('tab-accounts'));
+        document.getElementById('tab-btn-demand').addEventListener('click', () => switchTab('tab-demand'));
+        document.getElementById('tab-btn-whatsapp').addEventListener('click', () => switchTab('tab-whatsapp'));
+
+        const presetConfigs = {
+          'preset-shoprite': { account: 'Shoprite DC Wells Estate', eq: 'CHEP_BLUE', del: 34, ret: 4, reason: 'DC Exchange Pending' },
+          'preset-spar': { account: 'Spar Distribution PE / Gqeberha', eq: 'CHEP_BLUE', del: 28, ret: 0, reason: 'Refused by Receiver' },
+          'preset-idz': { account: 'IDZ Auto Plant East London', eq: 'LOSCAM_WOOD', del: 40, ret: 10, reason: 'IOU Voucher Issued' },
+          'preset-distell': { account: 'Distell Greenbushes PE', eq: 'CHEP_BLUE', del: 24, ret: 8, reason: 'IOU Voucher Issued' },
+          'preset-massmart': { account: 'Massmart Distribution City Deep', eq: 'CHEP_BLUE', del: 32, ret: 12, reason: 'Bay Congestion - Short Returned' },
+          'preset-pnp': { account: 'Pick n Pay DC Gqeberha', eq: 'PLAIN_WHITE', del: 26, ret: 0, reason: 'Refused by Receiver' }
+        };
+
+        Object.entries(presetConfigs).forEach(([btnId, pData]) => {
+          const btn = document.getElementById(btnId);
+          if (btn) {
+            btn.addEventListener('click', function () {
+              document.getElementById('entry-account').value = pData.account;
+              document.getElementById('entry-equipment').value = pData.eq;
+              document.getElementById('entry-delivered').value = pData.del;
+              document.getElementById('entry-returned').value = pData.ret;
+              document.getElementById('entry-reason').value = pData.reason;
+              document.getElementById('entry-unit-cost').value = getDefaultCostForEquipment(pData.eq);
+              document.getElementById('entry-waybill').value = 'WB-' + Math.floor(10000 + Math.random() * 90000);
+              updateEntryPreview();
+              showToast('Preset loaded: ' + pData.account);
+            });
+          }
+        });
+
+        const entryForm = document.getElementById('pallet-entry-form');
+        if (entryForm) {
+          entryForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const editId = document.getElementById('entry-edit-id').value;
+            const account = document.getElementById('entry-account').value.trim();
+            const equipment = document.getElementById('entry-equipment').value;
+            const waybill = document.getElementById('entry-waybill').value.trim();
+            const date = document.getElementById('entry-date').value;
+            const vehicle = document.getElementById('entry-vehicle').value.trim();
+            const driver = document.getElementById('entry-driver').value.trim();
+            const shift = document.getElementById('entry-shift').value;
+            const delivered = Number(document.getElementById('entry-delivered').value) || 0;
+            const returned = Number(document.getElementById('entry-returned').value) || 0;
+            const unitCost = Number(document.getElementById('entry-unit-cost').value) || getDefaultCostForEquipment(equipment);
+            const reason = document.getElementById('entry-reason').value;
+            const receiverRef = document.getElementById('entry-receiver-ref').value.trim();
+            const notes = document.getElementById('entry-notes').value.trim();
+
+            if (!account || !waybill || !date) {
+              alert('Please complete the required fields: Account, Waybill, and Date.');
+              return;
+            }
+
+            if (editId) {
+              const item = ledger.find(i => i.id === editId);
+              if (item) {
+                item.account = account;
+                item.equipment = equipment;
+                item.waybill = waybill;
+                item.date = date;
+                item.vehicle = vehicle;
+                item.driver = driver;
+                item.shift = shift;
+                item.delivered = delivered;
+                item.returned = returned;
+                item.unitCost = unitCost;
+                item.reason = reason;
+                item.receiverRef = receiverRef;
+                item.notes = notes;
+                showToast('Updated ticket ' + waybill);
+              }
+            } else {
+              const newEntry = {
+                id: 'mov-' + Date.now(),
+                date: date,
+                shift: shift,
+                waybill: waybill,
+                account: account,
+                vehicle: vehicle,
+                driver: driver,
+                equipment: equipment,
+                unitCost: unitCost,
+                delivered: delivered,
+                returned: returned,
+                reason: reason,
+                receiverRef: receiverRef,
+                notes: notes
+              };
+              ledger.unshift(newEntry);
+              showToast('Logged movement: ' + waybill);
+            }
+
+            saveLedger();
+            cancelEdit();
+            refreshAllViews();
+          });
+        }
+
+        document.getElementById('btn-clear-form').addEventListener('click', cancelEdit);
+        document.getElementById('btn-cancel-edit').addEventListener('click', cancelEdit);
+
+        const filterSearch = document.getElementById('filter-search');
+        if (filterSearch) {
+          filterSearch.addEventListener('input', function () {
+            filterText = filterSearch.value;
+            renderLedgerTable();
+          });
+        }
+
+        const filterAcc = document.getElementById('filter-account');
+        if (filterAcc) {
+          filterAcc.addEventListener('change', function () {
+            filterAccount = filterAcc.value;
+            renderLedgerTable();
+          });
+        }
+
+        const filterEq = document.getElementById('filter-equipment');
+        if (filterEq) {
+          filterEq.addEventListener('change', function () {
+            filterEquipment = filterEq.value;
+            renderLedgerTable();
+          });
+        }
+
+        const filterRk = document.getElementById('filter-risk');
+        if (filterRk) {
+          filterRk.addEventListener('change', function () {
+            filterRisk = filterRk.value;
+            renderLedgerTable();
+          });
+        }
+
+        document.getElementById('btn-clear-filters').addEventListener('click', function () {
+          filterText = '';
+          filterAccount = 'ALL';
+          filterEquipment = 'ALL';
+          filterRisk = 'ALL';
+          if (filterSearch) filterSearch.value = '';
+          if (filterAcc) filterAcc.value = 'ALL';
+          if (filterEq) filterEq.value = 'ALL';
+          if (filterRk) filterRk.value = 'ALL';
+          renderLedgerTable();
+          showToast('Filters cleared');
+        });
+
+        const masterTable = document.getElementById('master-ledger-table');
+        if (masterTable) {
+          masterTable.addEventListener('click', function (e) {
+            const btnReconcile = e.target.closest('.action-btn-reconcile');
+            if (btnReconcile) {
+              const id = btnReconcile.getAttribute('data-id');
+              openReconcileModal(id);
+              return;
+            }
+
+            const btnEdit = e.target.closest('.action-btn-edit');
+            if (btnEdit) {
+              const id = btnEdit.getAttribute('data-id');
+              startEdit(id);
+              return;
+            }
+
+            const btnDelete = e.target.closest('.action-btn-delete');
+            if (btnDelete) {
+              const id = btnDelete.getAttribute('data-id');
+              deleteTicket(id);
+              return;
+            }
+          });
+        }
+
+        const tabAccounts = document.getElementById('tab-accounts');
+        if (tabAccounts) {
+          tabAccounts.addEventListener('click', function (e) {
+            const btnDemand = e.target.closest('.action-account-demand');
+            if (btnDemand) {
+              const acc = btnDemand.getAttribute('data-account');
+              switchTab('tab-demand');
+              renderDemandNotice(acc);
+            }
+          });
+        }
+
+        const recForm = document.getElementById('reconcile-form');
+        if (recForm) {
+          recForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const id = document.getElementById('reconcile-trip-id').value;
+            const additionalRet = Number(document.getElementById('reconcile-additional-returned').value) || 0;
+            const slipRef = document.getElementById('reconcile-slip-ref').value.trim();
+            const statusChoice = document.getElementById('reconcile-status-choice').value;
+
+            const item = ledger.find(i => i.id === id);
+            if (!item) return;
+
+            const originalRet = Number(item.returned) || 0;
+            const del = Number(item.delivered) || 0;
+
+            if (statusChoice === 'FULL_SETTLEMENT') {
+              item.returned = del;
+              item.reason = 'Full Exchange Balanced';
+            } else {
+              item.returned = Math.min(del, originalRet + additionalRet);
+            }
+
+            item.receiverRef = (item.receiverRef ? item.receiverRef + ' | ' : '') + slipRef;
+            saveLedger();
+            closeReconcileModal();
+            refreshAllViews();
+            showToast('Reconciliation saved for ' + item.waybill);
+          });
+        }
+
+        document.getElementById('btn-close-reconcile').addEventListener('click', closeReconcileModal);
+        document.getElementById('btn-cancel-reconcile').addEventListener('click', closeReconcileModal);
+
+        const targetAccSelect = document.getElementById('demand-target-account');
+        if (targetAccSelect) {
+          targetAccSelect.addEventListener('change', function () {
+            updateDemandLetterContent(targetAccSelect.value);
+          });
+        }
+
+        const ultimatumSelect = document.getElementById('demand-ultimatum');
+        if (ultimatumSelect) {
+          ultimatumSelect.addEventListener('change', function () {
+            const target = targetAccSelect ? targetAccSelect.value : '';
+            updateDemandLetterContent(target);
+          });
+        }
+
+        const signatoryInput = document.getElementById('demand-signatory');
+        if (signatoryInput) {
+          signatoryInput.addEventListener('input', function () {
+            const target = targetAccSelect ? targetAccSelect.value : '';
+            updateDemandLetterContent(target);
+          });
+        }
+
+        const refNumberInput = document.getElementById('demand-ref-number');
+        if (refNumberInput) {
+          refNumberInput.addEventListener('input', function () {
+            const target = targetAccSelect ? targetAccSelect.value : '';
+            updateDemandLetterContent(target);
+          });
+        }
+
+        document.getElementById('btn-print-demand').addEventListener('click', function () {
+          window.print();
+        });
+
+        document.getElementById('btn-copy-demand-text').addEventListener('click', function () {
+          const sheet = document.getElementById('demand-letter-sheet');
+          if (!sheet) return;
+          const text = sheet.innerText;
+          navigator.clipboard.writeText(text).then(() => {
+            showToast('Formal letter copied to clipboard');
+          }).catch(() => {
+            showToast('Please press Ctrl+C to copy');
+          });
+        });
+
+        document.getElementById('btn-copy-whatsapp').addEventListener('click', function () {
+          const terminal = document.getElementById('whatsapp-formatted-text');
+          if (!terminal) return;
+          const text = terminal.textContent;
+          navigator.clipboard.writeText(text).then(() => {
+            showToast('WhatsApp summary copied to clipboard');
+          }).catch(() => {
+            showToast('Please press Ctrl+C to copy');
+          });
+        });
+
+        document.getElementById('btn-open-whatsapp-web').addEventListener('click', function () {
+          const terminal = document.getElementById('whatsapp-formatted-text');
+          if (!terminal) return;
+          const text = encodeURIComponent(terminal.textContent);
+          window.open('https://api.whatsapp.com/send?text=' + text, '_blank');
+        });
+
+        document.getElementById('btn-refresh-whatsapp').addEventListener('click', function () {
+          renderWhatsAppSummary();
+          showToast('WhatsApp summary refreshed');
+        });
+
+        const modalSettings = document.getElementById('modal-settings');
+        document.getElementById('btn-depot-settings').addEventListener('click', function () {
+          document.getElementById('cfg-depot-name').value = config.depotName;
+          document.getElementById('cfg-depot-address').value = config.depotAddress;
+          document.getElementById('cfg-depot-phone').value = config.depotPhone;
+          document.getElementById('cfg-depot-email').value = config.depotEmail;
+          document.getElementById('cfg-chep-account').value = config.chepAccount;
+          document.getElementById('cfg-loscam-account').value = config.loscamAccount;
+          document.getElementById('cfg-cost-chep').value = config.chepCost;
+          document.getElementById('cfg-cost-loscam').value = config.loscamCost;
+          document.getElementById('cfg-cost-white').value = config.whiteCost;
+          document.getElementById('cfg-manager-name').value = config.managerName;
+          if (modalSettings) modalSettings.classList.add('open');
+        });
+
+        function closeSettingsModal() {
+          if (modalSettings) modalSettings.classList.remove('open');
+        }
+
+        document.getElementById('btn-close-settings').addEventListener('click', closeSettingsModal);
+        document.getElementById('btn-cancel-settings').addEventListener('click', closeSettingsModal);
+
+        document.getElementById('depot-config-form').addEventListener('submit', function (e) {
+          e.preventDefault();
+          config.depotName = document.getElementById('cfg-depot-name').value.trim();
+          config.depotAddress = document.getElementById('cfg-depot-address').value.trim();
+          config.depotPhone = document.getElementById('cfg-depot-phone').value.trim();
+          config.depotEmail = document.getElementById('cfg-depot-email').value.trim();
+          config.chepAccount = document.getElementById('cfg-chep-account').value.trim();
+          config.loscamAccount = document.getElementById('cfg-loscam-account').value.trim();
+          config.chepCost = Number(document.getElementById('cfg-cost-chep').value) || 395;
+          config.loscamCost = Number(document.getElementById('cfg-cost-loscam').value) || 360;
+          config.whiteCost = Number(document.getElementById('cfg-cost-white').value) || 140;
+          config.managerName = document.getElementById('cfg-manager-name').value.trim();
+
+          saveConfig();
+          closeSettingsModal();
+          refreshAllViews();
+          showToast('Depot configuration saved');
+        });
+
+        document.getElementById('btn-export-csv').addEventListener('click', exportCSV);
+        document.getElementById('btn-backup-json').addEventListener('click', backupJSON);
+
+        const fileInput = document.getElementById('json-file-input');
+        document.getElementById('btn-import-json-trigger').addEventListener('click', function () {
+          if (fileInput) fileInput.click();
+        });
+
+        if (fileInput) {
+          fileInput.addEventListener('change', function (e) {
+            if (e.target.files && e.target.files[0]) {
+              handleJSONImport(e.target.files[0]);
+              fileInput.value = '';
+            }
+          });
+        }
+
+        document.getElementById('btn-reset-demo').addEventListener('click', function () {
+          const ok = confirm('Reset all records to the certified South African freight demo dataset? (This will overwrite current local ledger modifications)');
+          if (!ok) return;
+          ledger = getInitialDemoLedger();
+          config = { ...DEFAULT_CONFIG };
+          saveLedger();
+          saveConfig();
+          refreshAllViews();
+          showToast('Restored certified SA freight dataset');
+        });
+
+        refreshAllViews();
+        updateEntryPreview();
+      });
+
+    })();
+  </script>
+</body>
+</html>

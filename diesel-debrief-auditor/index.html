@@ -1,0 +1,2674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TRIPGUARD V1 - Diesel Siphon and Fleet Debrief Dispute Terminal for South African road freight depots. Detect diesel bleed, compute ZAR theft recovery, and generate BCEA Section 34 AOD notices.">
+  <title>TRIPGUARD V1 · Diesel Siphon and Fleet Debrief Dispute Terminal</title>
+
+  <!-- Hallmark Wayfind System Typography (Chivo Mono with robust monospaced fallback) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+
+  <style>
+/* Hallmark stamp: theme wayfind (platform), genre modern-minimal, idea: diesel siphon and fleet debrief dispute terminal */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · weakest: S, South African road freight debrief and BCEA Section 34 legal recovery */
+/* Hallmark · answered F3 · display head wraps cleanly with text-wrap balance */
+/* Hallmark · dismissed 69 · 100km is the statutory metric unit for South African freight fuel consumption across input and debrief panels */
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       HALLMARK WAYFIND TOKENS (Strict Single Token Declaration Block)
+       Zero npm/CDN dependencies · 2px Solid Ink Borders · Tabular Typography
+       ══════════════════════════════════════════════════════════════════════════ */
+    :root {
+      --paper:          oklch(96%   0.006 250);
+      --paper-2:        oklch(91.5% 0.008 250);
+      --paper-3:        oklch(99.2% 0.004 250);
+      --paper-4:        oklch(97.5% 0.005 250);
+      --ink:            oklch(16%   0.014 262);
+      --ink-2:          oklch(29%   0.014 262);
+      --ink-3:          oklch(40%   0.014 262);
+      --muted:          oklch(46%   0.015 260);
+      --rule:           oklch(80%   0.010 250);
+      --ink-rule:       oklch(32%   0.014 262);
+      --rule-subtle:    oklch(88%   0.008 250);
+
+      --cobalt:         oklch(48%   0.24  264);
+      --cobalt-ink:     oklch(99.2% 0.004 250);
+      --cobalt-hover:   oklch(42%   0.24  264);
+
+      --amber:          oklch(76%   0.17  80);
+      --amber-ink:      oklch(22%   0.08  80);
+      --amber-bg:       oklch(94%   0.05  80);
+
+      --green:          oklch(42%   0.18  144);
+      --green-bg:       oklch(93%   0.05  144);
+      --green-text:     oklch(26%   0.12  144);
+      --green-hover:    oklch(36%   0.18  144);
+
+      --red:            oklch(44%   0.24  26);
+      --red-bg:         oklch(93%   0.05  26);
+      --red-text:       oklch(28%   0.16  26);
+      --red-hover:      oklch(38%   0.24  26);
+
+      --board-bg:       oklch(17%   0.015 262);
+      --board-fg:       oklch(98%   0.005 250);
+      --board-line:     oklch(32%   0.015 262);
+      --board-amber:    oklch(82%   0.17  80);
+      --board-green:    oklch(74%   0.19  144);
+      --board-red:      oklch(68%   0.22  26);
+      --board-dim:      oklch(68%   0.015 260);
+      --board-dimmer:   oklch(48%   0.015 260);
+      --board-slot:     oklch(13%   0.015 262);
+      --board-hairline: oklch(22%   0.015 262);
+      --board-status-bg:oklch(22%   0.020 262);
+
+      --overlay-bg:     oklch(14%   0.014 262);
+      --shadow-color:   oklch(10%   0.014 262);
+
+      --font: "Chivo Mono", ui-monospace, monospace; /* taste-skill-ignore: wayfind theme - mono is the board body face */
+
+      --bar:  2px;
+      --hair: 1px;
+
+      --space-xxs: 0.25rem;
+      --space-xs:  0.375rem;
+      --space-sm:  0.625rem;
+      --space-md:  1rem;
+      --space-lg:  1.5rem;
+      --space-xl:  2.25rem;
+
+      --text-micro: clamp(0.6875rem, 0.65rem + 0.12vw, 0.75rem);
+      --text-label: clamp(0.75rem,   0.72rem + 0.15vw, 0.8125rem);
+      --text-body:  clamp(0.8125rem, 0.78rem + 0.20vw, 0.9375rem);
+      --text-title: clamp(1rem,      0.95rem + 0.35vw, 1.25rem);
+      --text-hero:  clamp(1.35rem,   1.20rem + 0.80vw, 1.95rem);
+      --text-stat:  clamp(2.0rem,    1.65rem + 1.50vw, 3.4rem);
+    }
+
+    /* ─── RESET AND DEFAULTS ──────────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: 0 !important;
+    }
+
+    html, body {
+      overflow-x: clip;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: var(--text-body);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-weight: 800;
+      line-height: 1.05;
+      text-wrap: balance;
+      overflow-wrap: break-word;
+      min-width: 0;
+    }
+
+    ::selection {
+      background: var(--ink);
+      color: var(--paper-3);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--cobalt);
+      outline-offset: 2px;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 1540px;
+      margin-inline: auto;
+      padding-inline: var(--space-md);
+    }
+
+    /* ─── TOP SYSTEM BAR ─────────────────────────────────────────────────── */
+    header.top-bar {
+      border-bottom: var(--bar) solid var(--ink);
+      background: var(--paper-3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .top-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 54px;
+      gap: var(--space-md);
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .brand-icon {
+      background: var(--ink);
+      color: var(--amber);
+      font-weight: 800;
+      font-size: var(--text-body);
+      padding: var(--space-xxs) var(--space-xs);
+      border: var(--bar) solid var(--ink);
+    }
+
+    .brand-name {
+      font-weight: 800;
+      font-size: var(--text-title);
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-xxs);
+    }
+
+    .brand-name span.sub {
+      font-weight: 500;
+      font-size: var(--text-micro);
+      color: var(--muted);
+      border-left: var(--hair) solid var(--rule);
+      padding-left: var(--space-xs);
+    }
+
+    .terminal-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .depot-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xxs);
+      border: var(--bar) solid var(--ink);
+      background: var(--paper-2);
+      padding: var(--space-xxs) var(--space-xs);
+      font-size: var(--text-micro);
+      font-weight: 700;
+    }
+
+    .depot-select {
+      background: transparent;
+      border: none;
+      font-family: var(--font);
+      font-size: var(--text-micro);
+      font-weight: 700;
+      color: var(--ink);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .clock-ticker {
+      font-size: var(--text-micro);
+      font-weight: 700;
+      color: var(--ink-2);
+      padding: var(--space-xxs) var(--space-xs);
+      border: var(--hair) solid var(--rule);
+      background: var(--paper-3);
+      display: none;
+    }
+
+    @media (min-width: 900px) {
+      .clock-ticker { display: block; }
+    }
+
+    .shift-alert-ticker {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xxs);
+      background: var(--board-bg);
+      color: var(--board-amber);
+      font-size: var(--text-micro);
+      font-weight: 700;
+      padding: var(--space-xxs) var(--space-xs);
+      border: var(--bar) solid var(--ink);
+    }
+
+    .shift-alert-ticker span.pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--board-red);
+      display: inline-block;
+      animation: blinker 1.2s steps(2, start) infinite;
+    }
+
+    .shift-alert-ticker:hover span.pulse,
+    .shift-alert-ticker:focus-within span.pulse {
+      animation-play-state: paused;
+    }
+
+    @keyframes blinker {
+      to { visibility: hidden; }
+    }
+
+    /* ─── PLATFORM DEPARTURE BOARD HERO ───────────────────────────────────── */
+    .hero-board {
+      background: var(--board-bg);
+      color: var(--board-fg);
+      border-bottom: var(--bar) solid var(--ink);
+      padding-block: var(--space-md);
+    }
+
+    .board-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: var(--hair) solid var(--board-line);
+      padding-bottom: var(--space-xs);
+      margin-bottom: var(--space-md);
+      font-size: var(--text-micro);
+      color: var(--board-dim);
+    }
+
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+
+    @media (max-width: 1200px) {
+      .board-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .board-cell:nth-child(4), .board-cell:nth-child(5) { grid-column: span 1.5; }
+    }
+
+    @media (max-width: 768px) {
+      .board-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .board-cell:last-child { grid-column: span 2; }
+    }
+
+    @media (max-width: 520px) {
+      .board-grid { grid-template-columns: 1fr; }
+      .board-cell:last-child { grid-column: span 1; }
+    }
+
+    .board-cell {
+      background: var(--board-slot);
+      border: var(--bar) solid var(--board-line);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 98px;
+      position: relative;
+    }
+
+    .board-cell::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: var(--hair);
+      background: var(--board-hairline);
+      pointer-events: none;
+    }
+
+    .cell-label {
+      font-size: var(--text-micro);
+      font-weight: 700;
+      color: var(--board-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cell-value {
+      font-size: var(--text-stat);
+      font-weight: 800;
+      color: var(--board-fg);
+      white-space: nowrap;
+      margin-top: var(--space-xxs);
+    }
+
+    .cell-sub {
+      font-size: var(--text-micro);
+      color: var(--board-dim);
+      font-weight: 500;
+      margin-top: var(--space-xxs);
+    }
+
+    .board-cell.amber .cell-value { color: var(--board-amber); }
+    .board-cell.red .cell-value   { color: var(--board-red); }
+    .board-cell.green .cell-value { color: var(--board-green); }
+
+    .board-cell.verdict {
+      background: var(--board-status-bg);
+      border-color: var(--ink);
+    }
+
+    .board-cell.verdict.status-green {
+      border-color: var(--board-green);
+    }
+    .board-cell.verdict.status-amber {
+      border-color: var(--board-amber);
+    }
+    .board-cell.verdict.status-red {
+      border-color: var(--board-red);
+    }
+
+    .verdict-tag {
+      display: inline-block;
+      font-size: var(--text-label);
+      font-weight: 800;
+      padding: var(--space-xxs) var(--space-xs);
+      border: var(--bar) solid currentColor;
+      margin-top: var(--space-xs);
+      white-space: normal;
+      line-height: 1.25;
+    }
+
+    .status-green .verdict-tag { color: var(--board-green); border-color: var(--board-green); }
+    .status-amber .verdict-tag { color: var(--board-amber); border-color: var(--board-amber); }
+    .status-red   .verdict-tag { color: var(--board-red);   border-color: var(--board-red); }
+
+    /* ─── QUICK PRESET AND SCENARIO TOOLBAR ──────────────────────────────── */
+    .preset-toolbar {
+      border-bottom: var(--bar) solid var(--ink);
+      background: var(--paper-2);
+      padding-block: var(--space-xs);
+    }
+
+    .preset-toolbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .preset-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
+
+    .preset-label {
+      font-size: var(--text-micro);
+      font-weight: 700;
+      color: var(--muted);
+      margin-right: var(--space-xxs);
+    }
+
+    .pill-btn {
+      font-family: var(--font);
+      font-size: var(--text-micro);
+      font-weight: 700;
+      padding: var(--space-xxs) var(--space-xs);
+      border: var(--bar) solid var(--ink);
+      background: var(--paper-3);
+      color: var(--ink);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 60ms steps(1), color 60ms steps(1);
+    }
+
+    .pill-btn:hover {
+      background: var(--ink);
+      color: var(--paper-3);
+    }
+
+    .pill-btn:active {
+      transform: translateY(1px);
+    }
+
+    .pill-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .pill-btn.danger-demo {
+      background: var(--red-bg);
+      color: var(--ink);
+      border-color: var(--red);
+      font-weight: 800;
+    }
+    .pill-btn.danger-demo:hover {
+      background: var(--red);
+      color: var(--paper-3);
+    }
+
+    /* ─── MAIN DUAL PANE WORKSPACE ────────────────────────────────────────── */
+    main.workspace-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      border-bottom: var(--bar) solid var(--ink);
+      min-height: calc(100vh - 280px);
+    }
+
+    @media (max-width: 1040px) {
+      main.workspace-grid { grid-template-columns: 1fr; }
+      .pane-right { border-top: var(--bar) solid var(--ink); }
+    }
+
+    .pane-left {
+      padding: var(--space-lg);
+      border-right: var(--bar) solid var(--ink);
+      background: var(--paper);
+    }
+
+    .pane-right {
+      padding: var(--space-lg);
+      background: var(--paper-2);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .section-title {
+      font-size: var(--text-label);
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: var(--space-md);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: var(--hair);
+      background: var(--ink-rule);
+    }
+
+    .section-title span.count-tag {
+      background: var(--ink);
+      color: var(--paper-3);
+      padding: var(--space-xxs) var(--space-xs);
+      font-size: var(--text-micro);
+    }
+
+    /* Form Fields */
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+
+    .form-row.col-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @media (max-width: 680px) {
+      .form-row, .form-row.col-3 { grid-template-columns: 1fr; }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xxs);
+    }
+
+    .field label {
+      font-size: var(--text-micro);
+      font-weight: 700;
+      color: var(--ink-2);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .field label span.hint {
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .input-wrap {
+      display: flex;
+      border: var(--bar) solid var(--ink);
+      background: var(--paper-3);
+    }
+
+    .input-wrap:focus-within {
+      outline: 2px solid var(--cobalt);
+    }
+
+    .input-addon {
+      background: var(--paper-2);
+      color: var(--ink);
+      font-size: var(--text-micro);
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-sm);
+      border-right: var(--hair) solid var(--rule);
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .input-addon.addon-right {
+      border-right: none;
+      border-left: var(--hair) solid var(--rule);
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      border: none;
+      outline: none;
+      padding: var(--space-xs) var(--space-sm);
+      font-family: var(--font);
+      font-size: var(--text-body);
+      font-weight: 700;
+      color: var(--ink);
+      background: transparent;
+    }
+
+    input:disabled,
+    select:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    select {
+      cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='%23111827' height='18' viewBox='0 0 24 24' width='18' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 0.65rem center;
+      padding-right: var(--space-lg);
+    }
+
+    .field-note {
+      font-size: var(--text-micro);
+      color: var(--muted);
+      margin-top: var(--space-xxs);
+      line-height: 1.35;
+    }
+
+    /* Telematics Warning Flag */
+    .telematics-flag {
+      border: var(--bar) solid var(--amber);
+      background: var(--amber-bg);
+      color: var(--amber-ink);
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--text-micro);
+      font-weight: 700;
+      margin-top: calc(-1 * var(--space-xxs));
+      margin-bottom: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    .telematics-flag.hidden {
+      display: none;
+    }
+
+    /* ─── LIVE VERDICT AND AUDIT PANEL ────────────────────────────────────── */
+    .audit-card {
+      border: var(--bar) solid var(--ink);
+      background: var(--paper-3);
+      padding: var(--space-md);
+    }
+
+    .audit-card-title {
+      font-size: var(--text-micro);
+      font-weight: 700;
+      color: var(--muted);
+      border-bottom: var(--hair) solid var(--rule);
+      padding-bottom: var(--space-xs);
+      margin-bottom: var(--space-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .variance-hero-banner {
+      border: var(--bar) solid var(--ink);
+      padding: var(--space-md);
+      text-align: center;
+      margin-bottom: var(--space-md);
+      transition: background-color 60ms steps(1), border-color 60ms steps(1);
+    }
+
+    .variance-hero-banner.status-green {
+      background: var(--green-bg);
+      border-color: var(--green);
+    }
+    .variance-hero-banner.status-amber {
+      background: var(--amber-bg);
+      border-color: var(--amber);
+    }
+    .variance-hero-banner.status-red {
+      background: var(--red-bg);
+      border-color: var(--red);
+    }
+
+    .variance-hero-title {
+      font-size: var(--text-hero);
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .status-green .variance-hero-title { color: var(--green-text); }
+    .status-amber .variance-hero-title { color: var(--amber-ink); }
+    .status-red   .variance-hero-title { color: var(--red-text); }
+
+    .variance-hero-sub {
+      font-size: var(--text-micro);
+      font-weight: 600;
+      margin-top: var(--space-xs);
+      color: var(--ink-2);
+    }
+
+    .calc-breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-body);
+      margin-bottom: var(--space-md);
+    }
+
+    .calc-breakdown-table td {
+      padding: var(--space-xs) var(--space-xxs);
+      border-bottom: var(--hair) solid var(--rule);
+    }
+
+    .calc-breakdown-table tr:last-child td {
+      border-bottom: var(--bar) solid var(--ink);
+      font-weight: 800;
+      font-size: var(--text-title);
+    }
+
+    .calc-breakdown-table td.label-col {
+      color: var(--ink-2);
+      font-weight: 500;
+      width: 58%;
+    }
+
+    .calc-breakdown-table td.val-col {
+      text-align: right;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .calc-breakdown-table td.val-col.bleed-red {
+      color: var(--red);
+    }
+    .calc-breakdown-table td.val-col.bleed-amber {
+      color: var(--amber-ink);
+    }
+    .calc-breakdown-table td.val-col.bleed-green {
+      color: var(--green);
+    }
+
+    /* Action Buttons */
+    .action-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      font-family: var(--font);
+      font-size: var(--text-label);
+      font-weight: 800;
+      white-space: nowrap;
+      padding: var(--space-sm) var(--space-md);
+      border: var(--bar) solid var(--ink);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 60ms steps(1), color 60ms steps(1);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--paper-3);
+    }
+    .btn-primary:hover {
+      background: var(--cobalt);
+      color: var(--cobalt-ink);
+    }
+
+    .btn-danger {
+      background: var(--red);
+      color: var(--red-ink);
+      border-color: var(--red);
+    }
+    .btn-danger:hover {
+      background: var(--red-hover);
+      color: var(--paper-3);
+    }
+
+    .btn-secondary {
+      background: var(--paper-3);
+      color: var(--ink);
+    }
+    .btn-secondary:hover {
+      background: var(--ink);
+      color: var(--paper-3);
+    }
+
+    .btn-success {
+      background: var(--green);
+      color: var(--paper-3);
+      border-color: var(--green);
+    }
+    .btn-success:hover {
+      background: var(--green-hover);
+    }
+
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-sm);
+    }
+
+    /* ─── SHIFT TRIP AUDIT HISTORY TABLE ─────────────────────────────────── */
+    section.history-section {
+      padding-block: var(--space-lg);
+      background: var(--paper-3);
+      border-bottom: var(--bar) solid var(--ink);
+    }
+
+    .history-head-cluster {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-md);
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      border: var(--bar) solid var(--ink);
+    }
+
+    table.history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-body);
+      min-width: 980px;
+    }
+
+    table.history-table th {
+      background: var(--ink);
+      color: var(--paper-3);
+      font-size: var(--text-micro);
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-sm);
+      text-align: left;
+      border-right: var(--hair) solid var(--ink-rule);
+    }
+
+    table.history-table td {
+      padding: var(--space-xs) var(--space-sm);
+      border-bottom: var(--bar) solid var(--rule);
+      border-right: var(--hair) solid var(--rule);
+      vertical-align: middle;
+    }
+
+    table.history-table tr:nth-child(even) td {
+      background: var(--paper-2);
+    }
+
+    table.history-table tr:hover td {
+      background: var(--paper-4);
+    }
+
+    .badge-status {
+      display: inline-block;
+      font-size: var(--text-micro);
+      font-weight: 800;
+      padding: var(--space-xxs) var(--space-xs);
+      border: var(--bar) solid currentColor;
+      white-space: nowrap;
+    }
+
+    .badge-status.b-green { color: var(--green-text); background: var(--green-bg); }
+    .badge-status.b-amber { color: var(--amber-ink);  background: var(--amber-bg); }
+    .badge-status.b-red   { color: var(--red-text);   background: var(--red-bg); }
+
+    .tbl-action-btn {
+      font-family: var(--font);
+      font-size: var(--text-micro);
+      font-weight: 700;
+      padding: var(--space-xxs) var(--space-xs);
+      border: var(--hair) solid var(--ink);
+      background: var(--paper-3);
+      cursor: pointer;
+      margin-right: var(--space-xxs);
+      white-space: nowrap;
+      transition: background-color 60ms steps(1), color 60ms steps(1);
+    }
+
+    .tbl-action-btn:hover {
+      background: var(--ink);
+      color: var(--paper-3);
+    }
+
+    .tbl-action-btn:active {
+      transform: translateY(1px);
+    }
+
+    .empty-state {
+      padding: var(--space-xl) var(--space-md);
+      text-align: center;
+      color: var(--muted);
+      font-size: var(--text-body);
+      background: var(--paper);
+    }
+
+    /* ─── MODAL OVERLAYS (Solid Scrim, Zero Blur) ─────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--overlay-bg);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-md);
+      overflow-y: auto;
+    }
+
+    .modal-overlay.hidden {
+      display: none;
+    }
+
+    .modal-box {
+      background: var(--paper-3);
+      border: var(--bar) solid var(--ink);
+      width: 100%;
+      max-width: 820px;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 10px 10px 0px var(--shadow-color);
+    }
+
+    .modal-header {
+      background: var(--ink);
+      color: var(--paper-3);
+      padding: var(--space-xs) var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: var(--bar) solid var(--ink);
+    }
+
+    .modal-title {
+      font-size: var(--text-label);
+      font-weight: 800;
+    }
+
+    .btn-close-modal {
+      background: transparent;
+      border: var(--hair) solid var(--paper-3);
+      color: var(--paper-3);
+      font-family: var(--font);
+      font-size: var(--text-micro);
+      font-weight: 800;
+      padding: var(--space-xxs) var(--space-xs);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 60ms steps(1), color 60ms steps(1);
+    }
+    .btn-close-modal:hover {
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    .modal-body {
+      padding: var(--space-lg);
+      overflow-y: auto;
+      font-size: var(--text-body);
+    }
+
+    .modal-footer {
+      padding: var(--space-md);
+      border-top: var(--bar) solid var(--ink);
+      background: var(--paper-2);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: var(--space-sm);
+    }
+
+    /* ─── PRINT-READY AOD SLIP STYLING (FORM AOD-104) ─────────────────────── */
+    .aod-slip-container {
+      background: var(--paper-3);
+      color: var(--ink);
+      padding: var(--space-lg);
+      border: var(--bar) solid var(--ink);
+      font-family: var(--font);
+    }
+
+    .aod-header {
+      border-bottom: var(--bar) solid var(--ink);
+      padding-bottom: var(--space-xs);
+      margin-bottom: var(--space-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .aod-badge-stamp {
+      border: var(--bar) solid var(--ink);
+      padding: var(--space-xs) var(--space-sm);
+      font-weight: 800;
+      font-size: var(--text-micro);
+      text-align: right;
+    }
+
+    .aod-doc-title {
+      font-size: var(--text-title);
+      font-weight: 800;
+      line-height: 1.15;
+    }
+
+    .aod-statutory-cite {
+      font-size: var(--text-micro);
+      color: var(--ink-2);
+      margin-top: var(--space-xxs);
+      font-weight: 500;
+    }
+
+    .aod-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+      border: var(--hair) solid var(--ink);
+      padding: var(--space-sm);
+      background: var(--paper-4);
+      font-size: var(--text-micro);
+    }
+
+    .aod-meta-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: var(--hair) solid var(--rule);
+      padding-bottom: var(--space-xxs);
+    }
+
+    .aod-meta-item span.k { font-weight: 600; color: var(--ink-2); }
+    .aod-meta-item span.v { font-weight: 800; color: var(--ink); }
+
+    .aod-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: var(--space-md);
+      font-size: var(--text-micro);
+      border: var(--bar) solid var(--ink);
+    }
+
+    .aod-table th {
+      background: var(--paper-2);
+      border: var(--hair) solid var(--ink);
+      padding: var(--space-xs);
+      text-align: left;
+      font-size: var(--text-micro);
+      font-weight: 700;
+    }
+
+    .aod-table td {
+      border: var(--hair) solid var(--ink);
+      padding: var(--space-xs);
+    }
+
+    .aod-table td.money {
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .aod-legal-clause {
+      font-size: var(--text-micro);
+      line-height: 1.45;
+      color: var(--ink-2);
+      border: var(--hair) solid var(--ink);
+      padding: var(--space-sm);
+      margin-bottom: var(--space-md);
+      background: var(--paper-4);
+    }
+
+    .aod-sig-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .aod-sig-box {
+      border-top: var(--hair) solid var(--ink);
+      padding-top: var(--space-xs);
+      font-size: var(--text-micro);
+      text-align: center;
+    }
+
+    .aod-sig-line {
+      height: 36px;
+    }
+
+    .aod-sig-title {
+      font-weight: 800;
+    }
+
+    /* WhatsApp Preview */
+    .wa-preview-box {
+      background: var(--board-bg);
+      color: var(--board-fg);
+      border: var(--bar) solid var(--ink);
+      padding: var(--space-md);
+      font-family: var(--font);
+      font-size: var(--text-micro);
+      white-space: pre-wrap;
+      line-height: 1.5;
+      user-select: all;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    /* ─── ACCESSIBILITY AND PREFERS-REDUCED-MOTION ────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .shift-alert-ticker span.pulse {
+        animation: none !important;
+      }
+    }
+
+    /* ─── PRINT MEDIA OVERRIDES ───────────────────────────────────────────── */
+    @media print {
+      body {
+        background: var(--paper-3) !important;
+        color: var(--ink) !important;
+        font-size: 10pt;
+      }
+      header.top-bar,
+      .hero-board,
+      .preset-toolbar,
+      main.workspace-grid,
+      section.history-section,
+      footer,
+      .modal-footer,
+      .modal-header,
+      .btn-close-modal,
+      #waModal {
+        display: none !important;
+      }
+      .modal-overlay {
+        position: static !important;
+        background: transparent !important;
+        padding: 0 !important;
+      }
+      .modal-box {
+        border: none !important;
+        box-shadow: none !important;
+        max-width: 100% !important;
+        max-height: none !important;
+      }
+      .modal-body {
+        padding: 0 !important;
+        overflow: visible !important;
+      }
+      .aod-slip-container {
+        border: var(--bar) solid var(--ink) !important;
+        page-break-after: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       1. TOP SYSTEM NAVIGATION & LIVE TELEMETRY TICKER
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <header class="top-bar">
+    <div class="wrap top-inner">
+      <div class="brand-cluster">
+        <div class="brand-icon">TG-1</div>
+        <div class="brand-name">
+          TRIPGUARD
+          <span class="sub">Diesel siphon and fleet debrief dispute terminal</span>
+        </div>
+      </div>
+
+      <div class="terminal-meta">
+        <div class="depot-badge">
+          Depot:
+          <select id="activeDepotSelect" class="depot-select" aria-label="Select Active Fleet Depot">
+            <option value="East London (West Bank Depot)">East London [EC-EL-01]</option>
+            <option value="Gqeberha (Deal Party Depot)">Gqeberha [EC-PLZ-02]</option>
+            <option value="Johannesburg (City Deep Freight Hub)" selected>Johannesburg [GP-JHB-04]</option>
+            <option value="Durban (Bayhead Port Terminal)">Durban [KZN-DBN-03]</option>
+          </select>
+        </div>
+
+        <div id="liveClockDisplay" class="clock-ticker">
+          2026-11-10 16:45:00 UTC+2
+        </div>
+
+        <div class="shift-alert-ticker">
+          <span class="pulse"></span>
+          <span id="shiftLossTicker">Shift loss: R 0.00 | 0.0 L bleed</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       2. HERO PLATFORM DEPARTURE BOARD
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="hero-board">
+    <div class="wrap">
+      <div class="board-header">
+        <span>Platform monitor: real-time debrief variance billboard</span>
+        <span>Statutory standards: NBCRFLI &amp; BCEA Section 34 compliant</span>
+      </div>
+
+      <div class="board-grid">
+        <!-- Plate 1: Actual Consumption -->
+        <div class="board-cell">
+          <div class="cell-label">
+            <span>Actual consumption</span>
+            <span>L/100km</span>
+          </div>
+          <div id="plateActualConsumption" class="cell-value">0.00</div>
+          <div id="plateActualKmL" class="cell-sub">0.00 km / Litre</div>
+        </div>
+
+        <!-- Plate 2: Baseline Allowance -->
+        <div class="board-cell">
+          <div class="cell-label">
+            <span>Baseline allowance</span>
+            <span>Standard</span>
+          </div>
+          <div id="plateBaselineRate" class="cell-value">48.00</div>
+          <div class="cell-sub">34-Ton Interlink preset</div>
+        </div>
+
+        <!-- Plate 3: Litres Bleed / Siphon -->
+        <div id="plateVarianceCell" class="board-cell red">
+          <div class="cell-label">
+            <span>Unaccounted bleed</span>
+            <span>Variance</span>
+          </div>
+          <div id="plateVarianceLitres" class="cell-value">+0.0 L</div>
+          <div id="plateVariancePct" class="cell-sub">0.0% vs baseline</div>
+        </div>
+
+        <!-- Plate 4: Total Financial Loss (ZAR) -->
+        <div class="board-cell amber">
+          <div class="cell-label">
+            <span>Financial recovery</span>
+            <span>ZAR ex VAT</span>
+          </div>
+          <div id="plateFinancialLoss" class="cell-value">R 0.00</div>
+          <div class="cell-sub">Payable under AOD notice</div>
+        </div>
+
+        <!-- Plate 5: Real-time Verdict Status -->
+        <div id="plateStatusBadge" class="board-cell verdict status-green">
+          <div class="cell-label">
+            <span>Debrief audit verdict</span>
+            <span>Status</span>
+          </div>
+          <div id="plateStatusDescription" class="verdict-tag">Clear - debrief approved</div>
+          <div class="cell-sub">Variance within 3.0% threshold</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       3. QUICK PRESET & DEMO SCENARIO TOOLBAR
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="preset-toolbar">
+    <div class="wrap preset-toolbar-inner">
+      <div class="preset-group">
+        <span class="preset-label">Truck class presets:</span>
+        <button type="button" class="pill-btn" onclick="applyTruckPreset('interlink34')">34t Interlink (48L)</button>
+        <button type="button" class="pill-btn" onclick="applyTruckPreset('triaxle28')">28t Triaxle (38L)</button>
+        <button type="button" class="pill-btn" onclick="applyTruckPreset('rigid14')">14t Hino (28L)</button>
+        <button type="button" class="pill-btn" onclick="applyTruckPreset('rigid8')">8t Freightliner (20L)</button>
+        <button type="button" class="pill-btn" onclick="applyTruckPreset('ldd4')">4t Delivery (15L)</button>
+      </div>
+
+      <div class="preset-group">
+        <span class="preset-label">Dispute scenarios:</span>
+        <button type="button" id="btnDemoTheft" class="pill-btn danger-demo">Load siphon theft (+26%)</button>
+        <button type="button" id="btnDemoFlagged" class="pill-btn">Load idle flagged (+6%)</button>
+        <button type="button" id="btnDemoClear" class="pill-btn">Load normal clear (1%)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       4. MAIN DUAL-PANE WORKSPACE: TRIP INPUTS & REAL-TIME AUDIT ENGINE
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <main class="workspace-grid wrap">
+    <!-- LEFT PANE: TRIP TELEMETRY & CONSUMPTION AUDIT INPUT FORM -->
+    <div class="pane-left">
+      <div class="section-title">
+        <span class="count-tag">01</span>
+        Trip telemetry and vehicle specification
+      </div>
+
+      <!-- Row 1: Vehicle & Class Preset -->
+      <div class="form-row">
+        <div class="field">
+          <label for="truckClassSelect">Truck class and baseline preset</label>
+          <div class="input-wrap">
+            <select id="truckClassSelect">
+              <option value="48.0" selected>34-Ton Interlink (Baseline: 48.0 L/100km | 2.08 km/L)</option>
+              <option value="38.0">28-Ton Triaxle (Baseline: 38.0 L/100km | 2.63 km/L)</option>
+              <option value="28.0">14-Tonner Rigid Hino / Isuzu (Baseline: 28.0 L/100km | 3.57 km/L)</option>
+              <option value="20.0">8-Tonner Freightliner / UD (Baseline: 20.0 L/100km | 5.00 km/L)</option>
+              <option value="15.0">4-Ton Light Delivery / NPR (Baseline: 15.0 L/100km | 6.67 km/L)</option>
+              <option value="custom">Custom specified class…</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="vehicleRegInput">
+            Vehicle registration / fleet ID
+            <span class="hint">Horse and trailer</span>
+          </label>
+          <div class="input-wrap">
+            <input type="text" id="vehicleRegInput" value="CA 842-991" placeholder="e.g. CA 842-991 / ND 593-102">
+            <input type="text" id="fleetIdInput" value="RIG-104B" placeholder="Unit # (RIG-104)" style="max-width: 130px; border-left: var(--hair) solid var(--rule);">
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Driver & Route -->
+      <div class="form-row">
+        <div class="field">
+          <label for="driverNameInput">Driver name and staff ID</label>
+          <div class="input-wrap">
+            <input type="text" id="driverNameInput" value="Sipho Ndlovu" placeholder="Driver Full Name">
+            <input type="text" id="staffIdInput" value="EMP-4402" placeholder="Staff ID" style="max-width: 120px; border-left: var(--hair) solid var(--rule);">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="routeSelect">Route corridor and terrain</label>
+          <div class="input-wrap">
+            <select id="routeSelect">
+              <option value="JHB City Deep ⇄ DBN Bayhead (N3 Corridor)" selected>JHB City Deep ⇄ DBN Bayhead (N3 Corridor, 570 km)</option>
+              <option value="JHB ⇄ CPT (N1 Karoo Corridor)">JHB ⇄ CPT (N1 Karoo Corridor, 1,400 km)</option>
+              <option value="Gqeberha (PE) ⇄ East London (R72 / N2)">Gqeberha (PE) ⇄ East London (R72 / N2, 290 km)</option>
+              <option value="East London ⇄ JHB (N6 / N1)">East London ⇄ JHB (N6 / N1, 980 km)</option>
+              <option value="Durban ⇄ East London (N2 Coastline)">Durban ⇄ East London (N2 Coastline, 660 km)</option>
+              <option value="custom">Custom route / local delivery…</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom: var(--space-md);">
+        <label for="customRouteInput">Custom route / manifest notes</label>
+        <div class="input-wrap">
+          <input type="text" id="customRouteInput" value="Trip Manifest #TR-88190, Full 34T Container Shunt" placeholder="Specific corridor notes, cargo load, or waybill numbers">
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span class="count-tag">02</span>
+        Odometer and telematics verification
+      </div>
+
+      <!-- Row 3: Odo Start, Odo End, Calculated Km -->
+      <div class="form-row col-3">
+        <div class="field">
+          <label for="odoStartInput">Odometer start</label>
+          <div class="input-wrap">
+            <input type="number" id="odoStartInput" value="384210" step="1" min="0">
+            <span class="input-addon addon-right">km</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="odoEndInput">Odometer end</label>
+          <div class="input-wrap">
+            <input type="number" id="odoEndInput" value="384780" step="1" min="0">
+            <span class="input-addon addon-right">km</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="totalDistanceInput">Audited total km</label>
+          <div class="input-wrap">
+            <input type="number" id="totalDistanceInput" value="570" readonly style="background: var(--paper-2); font-weight: 800;">
+            <span class="input-addon addon-right">km</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4: GPS Telematics Verification -->
+      <div class="form-row">
+        <div class="field">
+          <label for="gpsDistanceInput">
+            Ctrack / MiX Telematics GPS km
+            <span class="hint">Satellite audit</span>
+          </label>
+          <div class="input-wrap">
+            <input type="number" id="gpsDistanceInput" value="568" step="1" min="0" placeholder="GPS Tracking verified distance">
+            <span class="input-addon addon-right">km</span>
+          </div>
+          <div class="field-note">Compares wheel hubodometer against satellite breadcrumb tracking to detect speedo disconnection.</div>
+        </div>
+
+        <div class="field">
+          <label for="baselineRateInput">
+            Baseline consumption rate
+            <span class="hint">Override permitted</span>
+          </label>
+          <div class="input-wrap">
+            <input type="number" id="baselineRateInput" value="48.0" step="0.1" min="5" max="100">
+            <span class="input-addon addon-right">L / 100km</span>
+          </div>
+          <div class="field-note">Default engineering allowance for fleet class. Override if mountain pass or heavy headwind documented.</div>
+        </div>
+      </div>
+
+      <!-- Telematics Discrepancy Warning Flag -->
+      <div id="gpsVarianceWarning" class="telematics-flag hidden">
+        <div>
+          <strong>[FLAG] Telematics discrepancy detected:</strong>
+          <span id="gpsVarianceText">Odometer distance differs from GPS tracking by &gt;3.0%. Inspect hubodometer seal for speedo cable tampering.</span>
+        </div>
+        <button type="button" id="applyGpsBtn" class="pill-btn">Use GPS distance</button>
+      </div>
+
+      <div class="section-title">
+        <span class="count-tag">03</span>
+        Fuel refuelling and card expenditure
+      </div>
+
+      <!-- Row 5: Diesel Pumped, Tariff Type, Price Per Litre -->
+      <div class="form-row col-3">
+        <div class="field">
+          <label for="dieselPumpedInput">Diesel pumped / billed</label>
+          <div class="input-wrap">
+            <input type="number" id="dieselPumpedInput" value="345.0" step="0.1" min="0">
+            <span class="input-addon addon-right">Litres</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="fuelTariffType">Pump location / rate</label>
+          <div class="input-wrap">
+            <select id="fuelTariffType">
+              <option value="23.50" selected>En-route Card (Retail R23.50/L)</option>
+              <option value="21.80">Depot Bulk Bowser (Wholesale R21.80/L)</option>
+              <option value="custom">Custom price per litre…</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="fuelPriceInput">Fuel rate applied</label>
+          <div class="input-wrap">
+            <span class="input-addon">R</span>
+            <input type="number" id="fuelPriceInput" value="23.50" step="0.05" min="5">
+            <span class="input-addon addon-right">/ L</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 6: Total Fuel Card Cost & Terrain Fine Tuning -->
+      <div class="form-row">
+        <div class="field">
+          <label for="totalFuelCostInput">Total fuel card / slip invoice</label>
+          <div class="input-wrap">
+            <span class="input-addon">ZAR</span>
+            <input type="number" id="totalFuelCostInput" value="8107.50" step="0.50" min="0">
+          </div>
+          <div class="field-note">Auto-synchronizes with pumped litres and price per litre. Editing auto-derives exact tariff.</div>
+        </div>
+
+        <div class="field">
+          <label for="terrainSelect">Route load / congestion modifier</label>
+          <div class="input-wrap">
+            <select id="terrainSelect">
+              <option value="1.00" selected>Standard legal payload (100% baseline)</option>
+              <option value="1.08">Heavy mountain pass / Van Reenen (+8% allowance)</option>
+              <option value="1.05">High port congestion / city idle (+5% allowance)</option>
+              <option value="0.90">Empty return / deadhead (-10% allowance)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANE: LIVE VARIANCE & BLEED AUDIT ENGINE -->
+    <div class="pane-right">
+      <div class="section-title">
+        <span class="count-tag">04</span>
+        Live variance and bleed reconciliation
+      </div>
+
+      <!-- Big Status Banner -->
+      <div id="outVerdictBox" class="variance-hero-banner status-red">
+        <div class="cell-label" style="justify-content: center; margin-bottom: var(--space-xxs);">Debrief status audit</div>
+        <div id="outDebriefVerdict" class="variance-hero-title">Theft alert: unexplained diesel siphon confirmed</div>
+        <div id="outVerdictDetails" class="variance-hero-sub">Consumption variance of +26.1% exceeds the 8.0% forensic investigation threshold.</div>
+      </div>
+
+      <!-- Forensic Accounting Breakdown Table -->
+      <div class="audit-card">
+        <div class="audit-card-title">
+          <span>Mathematical reconciliation</span>
+          <span>Currency: ZAR</span>
+        </div>
+
+        <table class="calc-breakdown-table">
+          <tbody>
+            <tr>
+              <td class="label-col">Trip distance audited</td>
+              <td id="outDistanceKm" class="val-col">570.0 km</td>
+            </tr>
+            <tr>
+              <td class="label-col">Authorized baseline rate</td>
+              <td id="outBaselineRate" class="val-col">48.0 L / 100km</td>
+            </tr>
+            <tr>
+              <td class="label-col">Expected diesel allowance</td>
+              <td id="outExpectedLitres" class="val-col">273.60 Litres</td>
+            </tr>
+            <tr>
+              <td class="label-col">Actual diesel pumped / billed</td>
+              <td id="outActualLitres" class="val-col">345.00 Litres</td>
+            </tr>
+            <tr>
+              <td class="label-col">Actual consumption achieved</td>
+              <td id="outActualL100" class="val-col" style="color: var(--red);">60.53 L / 100km</td>
+            </tr>
+            <tr>
+              <td class="label-col">Variance percentage</td>
+              <td id="outVariancePct" class="val-col bleed-red">+26.10%</td>
+            </tr>
+            <tr>
+              <td class="label-col">Unaccounted diesel bleed</td>
+              <td id="outBleedLitres" class="val-col bleed-red">+71.40 Litres</td>
+            </tr>
+            <tr>
+              <td class="label-col">Tariff applied per litre</td>
+              <td id="outTariffRate" class="val-col">R 23.50 / L</td>
+            </tr>
+            <tr>
+              <td class="label-col"><strong>Total recoverable loss</strong></td>
+              <td id="outBleedCost" class="val-col bleed-red" style="font-size: 1.4rem;">R 1,677.90</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Telematics discrepancy notice if any -->
+        <div id="telematicsAlertBox" class="field-note" style="color: var(--amber-ink); font-weight: 700; display: none;">
+          [Audit] Telematics check: GPS tracking confirms 568 km vs 570 km hubodometer.
+        </div>
+      </div>
+
+      <!-- Action Stack -->
+      <div class="action-stack">
+        <button type="button" id="btnLogTrip" class="btn btn-primary">
+          Log trip to current shift audit
+        </button>
+
+        <div class="btn-group">
+          <button type="button" id="btnGenerateAod" class="btn btn-danger">
+            Generate driver AOD notice
+          </button>
+          <button type="button" id="btnWhatsAppCopy" class="btn btn-secondary">
+            WhatsApp debrief copy
+          </button>
+        </div>
+      </div>
+
+      <!-- Statutory Compliance Note -->
+      <div class="audit-card" style="font-size: var(--text-micro); line-height: 1.4; color: var(--muted);">
+        <strong>Legal governance:</strong>
+        Payroll deduction for fuel theft requires compliant acknowledgement in terms of Section 34 of the Basic Conditions of Employment Act (Act 75 of 1997) and the NBCRFLI Main Collective Agreement. Generating Form AOD-104 provides the statutory evidentiary trail.
+      </div>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       5. BATCH TRIP AUDIT HISTORY (Stored in LocalStorage for 10+ Trips Shift)
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="history-section">
+    <div class="wrap">
+      <div class="history-head-cluster">
+        <div>
+          <div class="section-title" style="margin-bottom: var(--space-xxs);">
+            <span class="count-tag">05</span>
+            Shift trip audit register and accumulated fleet bleed
+          </div>
+          <div style="font-size: var(--text-micro); color: var(--muted);">
+            Active depot shift log, auto-persisted in terminal storage for shift handover reporting
+          </div>
+        </div>
+
+        <div style="display: flex; gap: var(--space-sm); align-items: center;">
+          <button type="button" id="btnExportCsv" class="pill-btn">Export shift CSV</button>
+          <button type="button" id="btnClearHistory" class="pill-btn" style="color: var(--red);">Clear shift log</button>
+        </div>
+      </div>
+
+      <!-- Shift Summary Metrics Bar -->
+      <div class="board-grid" style="margin-bottom: var(--space-md);">
+        <div class="board-cell" style="background: var(--paper-2); border-color: var(--ink);">
+          <div class="cell-label" style="color: var(--ink-2);">Trips audited</div>
+          <div id="shiftTotalTrips" class="cell-value" style="color: var(--ink);">0</div>
+          <div class="cell-sub" style="color: var(--muted);">Shift total</div>
+        </div>
+
+        <div class="board-cell" style="background: var(--paper-2); border-color: var(--ink);">
+          <div class="cell-label" style="color: var(--ink-2);">Total km audited</div>
+          <div id="shiftTotalKm" class="cell-value" style="color: var(--ink);">0 km</div>
+          <div class="cell-sub" style="color: var(--muted);">Combined fleet distance</div>
+        </div>
+
+        <div class="board-cell red" style="background: var(--paper-2); border-color: var(--red);">
+          <div class="cell-label" style="color: var(--red);">Fleet diesel bleed</div>
+          <div id="shiftTotalBleedLitres" class="cell-value" style="color: var(--red);">0.0 L</div>
+          <div class="cell-sub" style="color: var(--muted);">Total unaccounted fuel</div>
+        </div>
+
+        <div class="board-cell amber" style="background: var(--paper-2); border-color: var(--ink);">
+          <div class="cell-label" style="color: var(--ink);">Financial bleed</div>
+          <div id="shiftTotalLossZar" class="cell-value" style="color: var(--amber-ink);">R 0.00</div>
+          <div class="cell-sub" style="color: var(--muted);">Direct financial loss</div>
+        </div>
+
+        <div class="board-cell" style="background: var(--paper-2); border-color: var(--ink);">
+          <div class="cell-label" style="color: var(--ink-2);">Audit breakdown</div>
+          <div style="font-size: var(--text-label); font-weight: 800; margin-top: var(--space-xxs);">
+            <span id="shiftClearCount" style="color: var(--green);">0 Clear</span>,
+            <span id="shiftFlaggedCount" style="color: var(--amber-ink);">0 Flagged</span>,
+            <span id="shiftTheftCount" style="color: var(--red);">0 Theft</span>
+          </div>
+          <div class="cell-sub" style="color: var(--muted);">Shift compliance ratio</div>
+        </div>
+      </div>
+
+      <!-- History Table -->
+      <div class="table-responsive">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Vehicle reg &amp; fleet #</th>
+              <th>Driver (Staff ID)</th>
+              <th>Route corridor</th>
+              <th>Distance</th>
+              <th>Expected</th>
+              <th>Pumped</th>
+              <th>Actual L/100</th>
+              <th>Bleed (Litres)</th>
+              <th>Financial loss</th>
+              <th>Status verdict</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <!-- Dynamically populated or empty state -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="emptyHistoryNotice" class="empty-state">
+        No trips logged in current shift. Complete the debrief form above and click “Log trip to current shift audit”.
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       6. MODAL: OFFICIAL AOD SLIP (PRINT-READY FORM AOD-104)
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <div id="aodModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="aodModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div id="aodModalTitle" class="modal-title">Form AOD-104: Acknowledgement of Debt and Disciplinary Notice</div>
+        <button type="button" id="btnCloseAod" class="btn-close-modal">Close</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="aod-slip-container">
+          <!-- AOD Header -->
+          <div class="aod-header">
+            <div>
+              <div class="aod-doc-title">Form AOD-104: Fleet debrief diesel variance notice</div>
+              <div class="aod-statutory-cite">
+                Issued in accordance with Section 34 of Basic Conditions of Employment Act (Act 75 of 1997) and NBCRFLI Clause 54
+              </div>
+            </div>
+            <div class="aod-badge-stamp">
+              <div>Dispute ref: <span id="aodSlipSerial">AOD-202611-9842</span></div>
+              <div id="aodDateStamp">10 Nov 2026 16:45</div>
+            </div>
+          </div>
+
+          <!-- Trip & Driver Information Grid -->
+          <div class="aod-meta-grid">
+            <div class="aod-meta-item">
+              <span class="k">Operating depot:</span>
+              <span id="aodDepotName" class="v">Johannesburg (City Deep)</span>
+            </div>
+            <div class="aod-meta-item">
+              <span class="k">Vehicle registration:</span>
+              <span id="aodVehicleReg" class="v">CA 842-991</span>
+            </div>
+            <div class="aod-meta-item">
+              <span class="k">Fleet unit number:</span>
+              <span id="aodFleetUnit" class="v">RIG-104B</span>
+            </div>
+            <div class="aod-meta-item">
+              <span class="k">Driver name:</span>
+              <span id="aodDriverName" class="v">Sipho Ndlovu</span>
+            </div>
+            <div class="aod-meta-item">
+              <span class="k">Employee / staff ID:</span>
+              <span id="aodStaffId" class="v">EMP-4402</span>
+            </div>
+            <div class="aod-meta-item">
+              <span class="k">Route / corridor:</span>
+              <span id="aodRouteCorridor" class="v">JHB City Deep ⇄ DBN Bayhead</span>
+            </div>
+          </div>
+
+          <!-- Forensic Mileage & Variance Table -->
+          <table class="aod-table">
+            <thead>
+              <tr>
+                <th>Metric / audit item</th>
+                <th>Hubodometer / record</th>
+                <th>Telematics (GPS)</th>
+                <th>Audited variance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Departure odometer (start)</td>
+                <td id="aodOdoStart">384,210 km</td>
+                <td>Verified service gate</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>Arrival odometer (end)</td>
+                <td id="aodOdoEnd">384,780 km</td>
+                <td>Verified depot bowser</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td><strong>Total distance traveled</strong></td>
+                <td id="aodOdoKm" style="font-weight: 800;">570.0 km</td>
+                <td id="aodGpsKm">568.0 km</td>
+                <td>Within 0.4% tolerance</td>
+              </tr>
+              <tr>
+                <td>Approved fleet baseline allowance</td>
+                <td id="aodBaselineRate">48.0 L / 100km</td>
+                <td>Class engineering standard</td>
+                <td>Standard tare</td>
+              </tr>
+              <tr>
+                <td>Authorized fuel allowance</td>
+                <td id="aodAllowedLitres">273.60 Litres</td>
+                <td>Permitted quantity</td>
+                <td>Benchmark</td>
+              </tr>
+              <tr>
+                <td>Actual diesel pumped and billed</td>
+                <td id="aodPumpedLitres" style="font-weight: 800;">345.00 Litres</td>
+                <td>Card slip reconciled</td>
+                <td style="color: var(--red); font-weight: 800;">Excess consumption</td>
+              </tr>
+              <tr style="background: var(--red-bg);">
+                <td><strong>Unaccounted diesel bleed / deficit</strong></td>
+                <td id="aodBleedLitres" style="font-weight: 800; color: var(--red);">+71.40 Litres</td>
+                <td id="aodBleedPct" style="font-weight: 800; color: var(--red);">+26.10% above target</td>
+                <td><strong>Siphon alert</strong></td>
+              </tr>
+              <tr style="background: var(--amber-bg);">
+                <td>Applicable bowser / retail tariff</td>
+                <td id="aodFuelPrice">R 23.50 / Litre</td>
+                <td>Wholesale / fleet rate</td>
+                <td>Billed</td>
+              </tr>
+              <tr style="background: var(--paper-2); font-size: 0.95rem;">
+                <td><strong>Total financial recovery owed</strong></td>
+                <td colspan="3" id="aodTotalDeduction" class="money" style="color: var(--red); font-size: 1.15rem;">
+                  R 1,677.90 ZAR
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Legal Deduction & Disciplinary Clause -->
+          <div class="aod-legal-clause">
+            <strong>1. Statutory acknowledgement and undertaking:</strong><br>
+            I, the undersigned Driver, hereby confirm that I operated the vehicle detailed above on the specified route corridor. I note that the actual fuel consumed exceeded the authorized fleet baseline allowance by the amount stipulated above.<br><br>
+            <strong>2. Section 34 payroll recovery notice:</strong><br>
+            In accordance with Section 34(1)(b) of the Basic Conditions of Employment Act (Act 75 of 1997) and the Main Collective Agreement of the National Bargaining Council for the Road Freight and Logistics Industry (NBCRFLI), I agree that in the event an independent telematics / technical debrief fails to establish legitimate mechanical cause for this discrepancy, the company may deduct the agreed loss from my remuneration across no more than 3 consecutive pay periods.<br><br>
+            <strong>3. Formal investigation:</strong><br>
+            This notice constitutes formal notification to appear before the Depot Fleet Controller for physical tank dip and telematics idle inspection within 24 hours of arrival.
+          </div>
+
+          <!-- Signature Blocks -->
+          <div class="aod-sig-grid">
+            <div class="aod-sig-box">
+              <div class="aod-sig-line"></div>
+              <div class="aod-sig-title">Driver signature</div>
+              <div id="aodDriverNameSign" style="color: var(--ink-2); margin-top: var(--space-xxs);">Sipho Ndlovu</div>
+              <div style="color: var(--muted);">Date: ____________________</div>
+            </div>
+
+            <div class="aod-sig-box">
+              <div class="aod-sig-line"></div>
+              <div class="aod-sig-title">Fleet controller / auditor</div>
+              <div id="aodControllerName" style="color: var(--ink-2); margin-top: var(--space-xxs);">Debrief Officer #04</div>
+              <div style="color: var(--muted);">Date: ____________________</div>
+            </div>
+
+            <div class="aod-sig-box">
+              <div class="aod-sig-line"></div>
+              <div class="aod-sig-title">Witness / shop steward</div>
+              <div id="aodWitnessName" style="color: var(--ink-2); margin-top: var(--space-xxs);">Depot Supervisor</div>
+              <div style="color: var(--muted);">Date: ____________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="btnPrintAod" class="btn btn-primary">Print official AOD notice (Ctrl+P)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       7. MODAL: WHATSAPP DISPUTE GENERATOR
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <div id="waModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="waModalTitle">
+    <div class="modal-box" style="max-width: 650px;">
+      <div class="modal-header">
+        <div id="waModalTitle" class="modal-title">WhatsApp fleet owner / operations debrief dispute</div>
+        <button type="button" id="btnCloseWa" class="btn-close-modal">Close</button>
+      </div>
+
+      <div class="modal-body">
+        <div style="font-size: var(--text-micro); color: var(--muted); margin-bottom: var(--space-sm);">
+          Pre-formatted for instant transmission to Fleet Owner, Dispatch Manager, and Line-Haul Controller:
+        </div>
+
+        <div id="waTextPreview" class="wa-preview-box">
+          <!-- Populated by JS -->
+        </div>
+
+        <div id="waCopyFeedback" style="color: var(--green); font-size: var(--text-micro); font-weight: 700; margin-top: var(--space-xs); display: none;">
+          Copied to clipboard. Ready to paste into WhatsApp.
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="btnCopyWaText" class="btn btn-secondary">Copy notice text</button>
+        <button type="button" id="btnLaunchWa" class="btn btn-success">Open WhatsApp Web</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       8. JAVASCRIPT STATE ENGINE & MATHEMATICAL LOGIC
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <script>
+    (function() {
+      "use strict";
+
+      // ─── STATE MODEL ────────────────────────────────────────────────────────
+      const TRUCK_PRESETS = {
+        interlink34: { name: "34-Ton Interlink", baseline: 48.0 },
+        triaxle28:   { name: "28-Ton Triaxle",   baseline: 38.0 },
+        rigid14:     { name: "14-Tonner Rigid",  baseline: 28.0 },
+        rigid8:      { name: "8-Tonner Rigid",   baseline: 20.0 },
+        ldd4:        { name: "4-Ton Delivery",   baseline: 15.0 }
+      };
+
+      const STORAGE_KEY = "tripguard_v1_shift_history";
+
+      let currentAudit = {
+        timestamp: new Date().toISOString(),
+        depot: "Johannesburg (City Deep Freight Hub)",
+        vehicleReg: "CA 842-991",
+        fleetId: "RIG-104B",
+        driverName: "Sipho Ndlovu",
+        staffId: "EMP-4402",
+        route: "JHB City Deep ⇄ DBN Bayhead (N3 Corridor)",
+        notes: "Trip Manifest #TR-88190, Full 34T Container Shunt",
+        odoStart: 384210,
+        odoEnd: 384780,
+        totalKm: 570,
+        gpsKm: 568,
+        baselineRate: 48.0,
+        terrainMod: 1.0,
+        effectiveBaseline: 48.0,
+        dieselPumped: 345.0,
+        fuelPrice: 23.50,
+        totalFuelCost: 8107.50,
+        expectedLitres: 273.60,
+        actualLitres: 345.00,
+        actualL100: 60.53,
+        actualKmL: 1.65,
+        bleedLitres: 71.40,
+        variancePct: 26.10,
+        financialLoss: 1677.90,
+        status: "RED", // GREEN | AMBER | RED
+        statusText: "Theft alert: unexplained diesel siphon confirmed",
+        slipSerial: "AOD-" + new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + "-" + Math.floor(1000 + Math.random() * 9000)
+      };
+
+      let shiftHistory = [];
+
+      // ─── DOM ELEMENT BINDINGS ───────────────────────────────────────────────
+      const activeDepotSelect     = document.getElementById("activeDepotSelect");
+      const liveClockDisplay      = document.getElementById("liveClockDisplay");
+      const shiftLossTicker       = document.getElementById("shiftLossTicker");
+
+      const plateActualConsumption = document.getElementById("plateActualConsumption");
+      const plateActualKmL        = document.getElementById("plateActualKmL");
+      const plateBaselineRate     = document.getElementById("plateBaselineRate");
+      const plateVarianceCell     = document.getElementById("plateVarianceCell");
+      const plateVarianceLitres   = document.getElementById("plateVarianceLitres");
+      const plateVariancePct      = document.getElementById("plateVariancePct");
+      const plateFinancialLoss    = document.getElementById("plateFinancialLoss");
+      const plateStatusBadge      = document.getElementById("plateStatusBadge");
+      const plateStatusDescription = document.getElementById("plateStatusDescription");
+
+      const truckClassSelect      = document.getElementById("truckClassSelect");
+      const vehicleRegInput       = document.getElementById("vehicleRegInput");
+      const fleetIdInput          = document.getElementById("fleetIdInput");
+      const driverNameInput       = document.getElementById("driverNameInput");
+      const staffIdInput          = document.getElementById("staffIdInput");
+      const routeSelect           = document.getElementById("routeSelect");
+      const customRouteInput      = document.getElementById("customRouteInput");
+      const odoStartInput         = document.getElementById("odoStartInput");
+      const odoEndInput           = document.getElementById("odoEndInput");
+      const totalDistanceInput    = document.getElementById("totalDistanceInput");
+      const gpsDistanceInput      = document.getElementById("gpsDistanceInput");
+      const baselineRateInput     = document.getElementById("baselineRateInput");
+      const gpsVarianceWarning    = document.getElementById("gpsVarianceWarning");
+      const gpsVarianceText       = document.getElementById("gpsVarianceText");
+      const applyGpsBtn           = document.getElementById("applyGpsBtn");
+      const dieselPumpedInput     = document.getElementById("dieselPumpedInput");
+      const fuelTariffType        = document.getElementById("fuelTariffType");
+      const fuelPriceInput        = document.getElementById("fuelPriceInput");
+      const totalFuelCostInput    = document.getElementById("totalFuelCostInput");
+      const terrainSelect         = document.getElementById("terrainSelect");
+
+      const outVerdictBox         = document.getElementById("outVerdictBox");
+      const outDebriefVerdict     = document.getElementById("outDebriefVerdict");
+      const outVerdictDetails     = document.getElementById("outVerdictDetails");
+      const outDistanceKm         = document.getElementById("outDistanceKm");
+      const outBaselineRate       = document.getElementById("outBaselineRate");
+      const outExpectedLitres     = document.getElementById("outExpectedLitres");
+      const outActualLitres       = document.getElementById("outActualLitres");
+      const outActualL100         = document.getElementById("outActualL100");
+      const outVariancePct        = document.getElementById("outVariancePct");
+      const outBleedLitres        = document.getElementById("outBleedLitres");
+      const outTariffRate         = document.getElementById("outTariffRate");
+      const outBleedCost          = document.getElementById("outBleedCost");
+      const telematicsAlertBox    = document.getElementById("telematicsAlertBox");
+
+      const btnLogTrip            = document.getElementById("btnLogTrip");
+      const btnGenerateAod        = document.getElementById("btnGenerateAod");
+      const btnWhatsAppCopy       = document.getElementById("btnWhatsAppCopy");
+      const btnDemoTheft          = document.getElementById("btnDemoTheft");
+      const btnDemoFlagged        = document.getElementById("btnDemoFlagged");
+      const btnDemoClear          = document.getElementById("btnDemoClear");
+      const btnExportCsv          = document.getElementById("btnExportCsv");
+      const btnClearHistory       = document.getElementById("btnClearHistory");
+
+      const shiftTotalTrips       = document.getElementById("shiftTotalTrips");
+      const shiftTotalKm          = document.getElementById("shiftTotalKm");
+      const shiftTotalBleedLitres = document.getElementById("shiftTotalBleedLitres");
+      const shiftTotalLossZar     = document.getElementById("shiftTotalLossZar");
+      const shiftClearCount       = document.getElementById("shiftClearCount");
+      const shiftFlaggedCount     = document.getElementById("shiftFlaggedCount");
+      const shiftTheftCount       = document.getElementById("shiftTheftCount");
+      const historyTableBody      = document.getElementById("historyTableBody");
+      const emptyHistoryNotice    = document.getElementById("emptyHistoryNotice");
+
+      // AOD Modal Elements
+      const aodModal              = document.getElementById("aodModal");
+      const aodModalTitle         = document.getElementById("aodModalTitle");
+      const btnCloseAod           = document.getElementById("btnCloseAod");
+      const btnPrintAod           = document.getElementById("btnPrintAod");
+      const aodSlipSerial         = document.getElementById("aodSlipSerial");
+      const aodDateStamp          = document.getElementById("aodDateStamp");
+      const aodDepotName          = document.getElementById("aodDepotName");
+      const aodVehicleReg         = document.getElementById("aodVehicleReg");
+      const aodFleetUnit          = document.getElementById("aodFleetUnit");
+      const aodDriverName         = document.getElementById("aodDriverName");
+      const aodStaffId            = document.getElementById("aodStaffId");
+      const aodRouteCorridor      = document.getElementById("aodRouteCorridor");
+      const aodOdoStart           = document.getElementById("aodOdoStart");
+      const aodOdoEnd             = document.getElementById("aodOdoEnd");
+      const aodOdoKm              = document.getElementById("aodOdoKm");
+      const aodGpsKm              = document.getElementById("aodGpsKm");
+      const aodBaselineRate       = document.getElementById("aodBaselineRate");
+      const aodAllowedLitres      = document.getElementById("aodAllowedLitres");
+      const aodPumpedLitres       = document.getElementById("aodPumpedLitres");
+      const aodBleedLitres        = document.getElementById("aodBleedLitres");
+      const aodBleedPct           = document.getElementById("aodBleedPct");
+      const aodFuelPrice          = document.getElementById("aodFuelPrice");
+      const aodTotalDeduction     = document.getElementById("aodTotalDeduction");
+      const aodDriverNameSign     = document.getElementById("aodDriverNameSign");
+      const aodControllerName     = document.getElementById("aodControllerName");
+      const aodWitnessName        = document.getElementById("aodWitnessName");
+
+      // WhatsApp Modal Elements
+      const waModal               = document.getElementById("waModal");
+      const waModalTitle          = document.getElementById("waModalTitle");
+      const btnCloseWa            = document.getElementById("btnCloseWa");
+      const waTextPreview         = document.getElementById("waTextPreview");
+      const waCopyFeedback        = document.getElementById("waCopyFeedback");
+      const btnCopyWaText         = document.getElementById("btnCopyWaText");
+      const btnLaunchWa           = document.getElementById("btnLaunchWa");
+
+      // ─── INITIALIZATION & PERSISTENCE ──────────────────────────────────────
+      function init() {
+        loadHistoryFromStorage();
+        updateClock();
+        setInterval(updateClock, 1000);
+        bindEventListeners();
+        calculateAudit();
+        renderHistory();
+      }
+
+      function updateClock() {
+        const now = new Date();
+        const pad = (n) => String(n).padStart(2, "0");
+        const str = now.getFullYear() + "-" +
+          pad(now.getMonth() + 1) + "-" +
+          pad(now.getDate()) + " " +
+          pad(now.getHours()) + ":" +
+          pad(now.getMinutes()) + ":" +
+          pad(now.getSeconds()) + " UTC+2";
+        if (liveClockDisplay) {
+          liveClockDisplay.textContent = str;
+        }
+      }
+
+      function loadHistoryFromStorage() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            shiftHistory = JSON.parse(raw);
+          } else {
+            shiftHistory = [];
+          }
+        } catch (e) {
+          shiftHistory = [];
+        }
+      }
+
+      function saveHistoryToStorage() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(shiftHistory));
+        } catch (e) {
+          console.warn("Storage quota exceeded or disabled", e);
+        }
+      }
+
+      // ─── CORE MATHEMATICAL CALCULATION ENGINE ─────────────────────────────
+      function calculateAudit() {
+        const odoStart = parseFloat(odoStartInput.value) || 0;
+        const odoEnd = parseFloat(odoEndInput.value) || 0;
+        let distance = Math.max(0, odoEnd - odoStart);
+        totalDistanceInput.value = distance;
+
+        const gpsKm = parseFloat(gpsDistanceInput.value) || 0;
+        const baseRate = parseFloat(baselineRateInput.value) || 48.0;
+        const terrainMod = parseFloat(terrainSelect.value) || 1.0;
+        const effectiveBaseline = baseRate * terrainMod;
+
+        const dieselPumped = Math.max(0, parseFloat(dieselPumpedInput.value) || 0);
+        const fuelPrice = Math.max(0, parseFloat(fuelPriceInput.value) || 23.50);
+
+        // Expected Consumption in Litres
+        const expectedLitres = (distance * effectiveBaseline) / 100;
+
+        // Actual Consumption achieved
+        let actualL100 = 0;
+        let actualKmL = 0;
+        if (distance > 0) {
+          actualL100 = (dieselPumped / distance) * 100;
+          actualKmL = dieselPumped > 0 ? (distance / dieselPumped) : 0;
+        }
+
+        // Bleed / Siphon Litres & Variance %
+        const bleedLitres = dieselPumped - expectedLitres;
+        let variancePct = 0;
+        if (expectedLitres > 0) {
+          variancePct = (bleedLitres / expectedLitres) * 100;
+        }
+
+        // Financial Recovery Loss in ZAR (Only positive bleed constitutes monetary recovery)
+        const financialLoss = bleedLitres > 0 ? (bleedLitres * fuelPrice) : 0;
+
+        // Debrief Status Threshold Evaluation:
+        // GREEN: <= 3% variance (Approved)
+        // AMBER: 3% - 8% variance (Flagged - Idle / mountain check)
+        // RED:   > 8% variance (Theft Alert - Siphon confirmed)
+        let status = "GREEN";
+        let statusText = "Clear - debrief approved";
+        let statusSub = "Consumption within 3.0% operational fleet tolerance.";
+
+        if (variancePct > 8.0) {
+          status = "RED";
+          statusText = "Theft alert: unexplained diesel siphon confirmed";
+          statusSub = `Consumption variance of +${variancePct.toFixed(1)}% exceeds 8.0% forensic threshold. Immediate physical dip required.`;
+        } else if (variancePct > 3.0) {
+          status = "AMBER";
+          statusText = "Flagged - excess idle / driver log check";
+          statusSub = `Moderate variance of +${variancePct.toFixed(1)}% detected. Check telematics idle log, mountain passes, or trailer reefer fuel.`;
+        }
+
+        // Hubodometer vs GPS Satellite Variance Check
+        if (gpsKm > 0 && distance > 0) {
+          const gpsDiff = Math.abs(distance - gpsKm);
+          const gpsDiffPct = (gpsDiff / distance) * 100;
+          if (gpsDiffPct > 3.0) {
+            gpsVarianceText.textContent = `Odometer (${distance} km) differs from GPS (${gpsKm} km) by ${gpsDiff.toFixed(1)} km (${gpsDiffPct.toFixed(1)}%). Check for hubodometer disconnection or unauthorized off-route deviation.`;
+            gpsVarianceWarning.classList.remove("hidden");
+            telematicsAlertBox.style.display = "block";
+            telematicsAlertBox.textContent = `[Warning] Hubodometer shows ${distance} km vs GPS satellite ${gpsKm} km. Discrepancy: ${gpsDiff.toFixed(1)} km.`;
+          } else {
+            gpsVarianceWarning.classList.add("hidden");
+            telematicsAlertBox.style.display = "block";
+            telematicsAlertBox.textContent = `[Audit] Satellite GPS tracking confirms ${gpsKm} km vs ${distance} km odometer (variance ${gpsDiffPct.toFixed(1)}% within tolerance).`;
+          }
+        } else {
+          gpsVarianceWarning.classList.add("hidden");
+          telematicsAlertBox.style.display = "none";
+        }
+
+        // Update current audit record state
+        currentAudit.depot = activeDepotSelect.value;
+        currentAudit.vehicleReg = vehicleRegInput.value.trim() || "CA 842-991";
+        currentAudit.fleetId = fleetIdInput.value.trim() || "FLEET-01";
+        currentAudit.driverName = driverNameInput.value.trim() || "Driver";
+        currentAudit.staffId = staffIdInput.value.trim() || "STAFF";
+        currentAudit.route = routeSelect.value === "custom" ? (customRouteInput.value.trim() || "Custom Route") : routeSelect.value;
+        currentAudit.notes = customRouteInput.value.trim();
+        currentAudit.odoStart = odoStart;
+        currentAudit.odoEnd = odoEnd;
+        currentAudit.totalKm = distance;
+        currentAudit.gpsKm = gpsKm;
+        currentAudit.baselineRate = baseRate;
+        currentAudit.terrainMod = terrainMod;
+        currentAudit.effectiveBaseline = effectiveBaseline;
+        currentAudit.dieselPumped = dieselPumped;
+        currentAudit.fuelPrice = fuelPrice;
+        currentAudit.totalFuelCost = parseFloat(totalFuelCostInput.value) || (dieselPumped * fuelPrice);
+        currentAudit.expectedLitres = expectedLitres;
+        currentAudit.actualLitres = dieselPumped;
+        currentAudit.actualL100 = actualL100;
+        currentAudit.actualKmL = actualKmL;
+        currentAudit.bleedLitres = bleedLitres;
+        currentAudit.variancePct = variancePct;
+        currentAudit.financialLoss = financialLoss;
+        currentAudit.status = status;
+        currentAudit.statusText = statusText;
+
+        // Render DOM Readings
+        plateActualConsumption.textContent = actualL100.toFixed(2);
+        plateActualKmL.textContent = actualKmL > 0 ? `${actualKmL.toFixed(2)} km / Litre` : "0.00 km / L";
+        plateBaselineRate.textContent = effectiveBaseline.toFixed(2);
+
+        plateVarianceLitres.textContent = (bleedLitres >= 0 ? "+" : "") + bleedLitres.toFixed(1) + " L";
+        plateVariancePct.textContent = (variancePct >= 0 ? "+" : "") + variancePct.toFixed(1) + "% vs baseline";
+        plateFinancialLoss.textContent = "R " + financialLoss.toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        // Update Hero Plate Status Colors
+        plateStatusBadge.className = "board-cell verdict " + (status === "RED" ? "status-red" : status === "AMBER" ? "status-amber" : "status-green");
+        plateStatusDescription.textContent = statusText;
+
+        outVerdictBox.className = "variance-hero-banner " + (status === "RED" ? "status-red" : status === "AMBER" ? "status-amber" : "status-green");
+        outDebriefVerdict.textContent = statusText;
+        outVerdictDetails.textContent = statusSub;
+
+        // Update Right Pane Table
+        outDistanceKm.textContent = distance.toFixed(1) + " km";
+        outBaselineRate.textContent = effectiveBaseline.toFixed(1) + " L / 100km";
+        outExpectedLitres.textContent = expectedLitres.toFixed(2) + " Litres";
+        outActualLitres.textContent = dieselPumped.toFixed(2) + " Litres";
+        outActualL100.textContent = actualL100.toFixed(2) + " L / 100km";
+
+        const bleedClass = status === "RED" ? "val-col bleed-red" : status === "AMBER" ? "val-col bleed-amber" : "val-col bleed-green";
+        outVariancePct.className = bleedClass;
+        outVariancePct.textContent = (variancePct >= 0 ? "+" : "") + variancePct.toFixed(2) + "%";
+
+        outBleedLitres.className = bleedClass;
+        outBleedLitres.textContent = (bleedLitres >= 0 ? "+" : "") + bleedLitres.toFixed(2) + " Litres";
+
+        outTariffRate.textContent = "R " + fuelPrice.toFixed(2) + " / L";
+
+        outBleedCost.className = bleedClass;
+        outBleedCost.textContent = "R " + financialLoss.toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      // ─── EVENT HANDLERS & INPUT BINDINGS ──────────────────────────────────
+      function bindEventListeners() {
+        const inputsToListen = [
+          odoStartInput, odoEndInput, gpsDistanceInput, baselineRateInput,
+          dieselPumpedInput, fuelPriceInput, terrainSelect, activeDepotSelect,
+          truckClassSelect, vehicleRegInput, fleetIdInput, driverNameInput,
+          staffIdInput, routeSelect, customRouteInput
+        ];
+
+        inputsToListen.forEach(elem => {
+          if (elem) {
+            elem.addEventListener("input", calculateAudit);
+            elem.addEventListener("change", calculateAudit);
+          }
+        });
+
+        // Fuel Type Preset Selector
+        fuelTariffType.addEventListener("change", function() {
+          if (this.value !== "custom") {
+            fuelPriceInput.value = this.value;
+            syncFuelCostFromLitres();
+            calculateAudit();
+          }
+        });
+
+        // Truck Class Preset Selector
+        truckClassSelect.addEventListener("change", function() {
+          if (this.value !== "custom") {
+            baselineRateInput.value = this.value;
+            calculateAudit();
+          }
+        });
+
+        // Direct fuel cost input updates unit price
+        totalFuelCostInput.addEventListener("input", function() {
+          const cost = parseFloat(this.value) || 0;
+          const litres = parseFloat(dieselPumpedInput.value) || 0;
+          if (litres > 0 && cost > 0) {
+            const derivedPrice = cost / litres;
+            fuelPriceInput.value = derivedPrice.toFixed(2);
+            fuelTariffType.value = "custom";
+            calculateAudit();
+          }
+        });
+
+        // Diesel pumped updates total card amount
+        dieselPumpedInput.addEventListener("input", function() {
+          syncFuelCostFromLitres();
+        });
+
+        fuelPriceInput.addEventListener("input", function() {
+          syncFuelCostFromLitres();
+        });
+
+        // Apply GPS Distance button
+        applyGpsBtn.addEventListener("click", function() {
+          const gpsKm = parseFloat(gpsDistanceInput.value) || 0;
+          if (gpsKm > 0) {
+            const start = parseFloat(odoStartInput.value) || 0;
+            odoEndInput.value = start + gpsKm;
+            calculateAudit();
+          }
+        });
+
+        // Preset Scenario Buttons
+        btnDemoTheft.addEventListener("click", function() {
+          loadScenario("theft");
+        });
+
+        btnDemoFlagged.addEventListener("click", function() {
+          loadScenario("flagged");
+        });
+
+        btnDemoClear.addEventListener("click", function() {
+          loadScenario("clear");
+        });
+
+        // Action Buttons
+        btnLogTrip.addEventListener("click", logCurrentTrip);
+        btnGenerateAod.addEventListener("click", openAodModal);
+        btnWhatsAppCopy.addEventListener("click", openWhatsAppModal);
+        btnExportCsv.addEventListener("click", exportShiftCsv);
+        btnClearHistory.addEventListener("click", clearShiftHistory);
+
+        // Modal Close Buttons
+        btnCloseAod.addEventListener("click", closeAodModal);
+        btnPrintAod.addEventListener("click", function() {
+          window.print();
+        });
+
+        btnCloseWa.addEventListener("click", closeWhatsAppModal);
+        btnCopyWaText.addEventListener("click", copyWhatsAppText);
+        btnLaunchWa.addEventListener("click", launchWhatsAppWeb);
+
+        // Escape Key Modal Listener
+        window.addEventListener("keydown", function(e) {
+          if (e.key === "Escape") {
+            closeAodModal();
+            closeWhatsAppModal();
+          }
+        });
+      }
+
+      function syncFuelCostFromLitres() {
+        const litres = parseFloat(dieselPumpedInput.value) || 0;
+        const price = parseFloat(fuelPriceInput.value) || 23.50;
+        totalFuelCostInput.value = (litres * price).toFixed(2);
+      }
+
+      window.applyTruckPreset = function(presetKey) {
+        const preset = TRUCK_PRESETS[presetKey];
+        if (!preset) return;
+        baselineRateInput.value = preset.baseline.toFixed(1);
+        let matched = false;
+        for (let i = 0; i < truckClassSelect.options.length; i++) {
+          if (parseFloat(truckClassSelect.options[i].value) === preset.baseline) {
+            truckClassSelect.selectedIndex = i;
+            matched = true;
+            break;
+          }
+        }
+        if (!matched) truckClassSelect.value = "custom";
+        calculateAudit();
+      };
+
+      // ─── SCENARIO LOADER ──────────────────────────────────────────────────
+      function loadScenario(type) {
+        if (type === "theft") {
+          truckClassSelect.value = "48.0";
+          vehicleRegInput.value = "CA 842-991";
+          fleetIdInput.value = "RIG-104B";
+          driverNameInput.value = "Sipho Ndlovu";
+          staffIdInput.value = "EMP-4402";
+          routeSelect.value = "JHB City Deep ⇄ DBN Bayhead (N3 Corridor)";
+          customRouteInput.value = "Trip Manifest #TR-88190, Full 34T Container Shunt";
+          odoStartInput.value = "384210";
+          odoEndInput.value = "384780";
+          gpsDistanceInput.value = "568";
+          baselineRateInput.value = "48.0";
+          terrainSelect.value = "1.00";
+          dieselPumpedInput.value = "345.0";
+          fuelTariffType.value = "23.50";
+          fuelPriceInput.value = "23.50";
+          totalFuelCostInput.value = (345.0 * 23.50).toFixed(2);
+        } else if (type === "flagged") {
+          truckClassSelect.value = "38.0";
+          vehicleRegInput.value = "FS 29 RT GP";
+          fleetIdInput.value = "TRK-77";
+          driverNameInput.value = "Musa Khumalo";
+          staffIdInput.value = "EMP-3108";
+          routeSelect.value = "JHB ⇄ CPT (N1 Karoo Corridor)";
+          customRouteInput.value = "High Karoo wind & Hex River Pass climb";
+          odoStartInput.value = "512400";
+          odoEndInput.value = "513800";
+          gpsDistanceInput.value = "1402";
+          baselineRateInput.value = "38.0";
+          terrainSelect.value = "1.00";
+          dieselPumpedInput.value = "563.0";
+          fuelTariffType.value = "23.50";
+          fuelPriceInput.value = "23.50";
+          totalFuelCostInput.value = (563.0 * 23.50).toFixed(2);
+        } else if (type === "clear") {
+          truckClassSelect.value = "28.0";
+          vehicleRegInput.value = "BC 18 ND EC";
+          fleetIdInput.value = "HINO-14";
+          driverNameInput.value = "Lwazi Mthembu";
+          staffIdInput.value = "EMP-5091";
+          routeSelect.value = "Gqeberha (PE) ⇄ East London (R72 / N2)";
+          customRouteInput.value = "General freight automotive component delivery";
+          odoStartInput.value = "192300";
+          odoEndInput.value = "192590";
+          gpsDistanceInput.value = "290";
+          baselineRateInput.value = "28.0";
+          terrainSelect.value = "1.00";
+          dieselPumpedInput.value = "82.0";
+          fuelTariffType.value = "21.80";
+          fuelPriceInput.value = "21.80";
+          totalFuelCostInput.value = (82.0 * 21.80).toFixed(2);
+        }
+        calculateAudit();
+      }
+
+      // ─── SHIFT BATCH LOGGING & MANAGEMENT ─────────────────────────────────
+      function logCurrentTrip() {
+        calculateAudit();
+
+        const entry = {
+          id: "TRIP-" + Date.now(),
+          timestamp: new Date().toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit" }),
+          depot: currentAudit.depot,
+          vehicleReg: currentAudit.vehicleReg,
+          fleetId: currentAudit.fleetId,
+          driverName: currentAudit.driverName,
+          staffId: currentAudit.staffId,
+          route: currentAudit.route,
+          notes: currentAudit.notes,
+          odoKm: currentAudit.totalKm,
+          gpsKm: currentAudit.gpsKm,
+          expectedLitres: currentAudit.expectedLitres,
+          pumpedLitres: currentAudit.dieselPumped,
+          baselineRate: currentAudit.effectiveBaseline,
+          actualL100: currentAudit.actualL100,
+          bleedLitres: currentAudit.bleedLitres,
+          variancePct: currentAudit.variancePct,
+          financialLoss: currentAudit.financialLoss,
+          fuelPrice: currentAudit.fuelPrice,
+          status: currentAudit.status,
+          statusText: currentAudit.statusText,
+          slipSerial: "AOD-" + new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + "-" + Math.floor(1000 + Math.random() * 9000)
+        };
+
+        shiftHistory.unshift(entry);
+        saveHistoryToStorage();
+        renderHistory();
+
+        btnLogTrip.textContent = "Trip logged to shift";
+        btnLogTrip.style.background = "var(--green)";
+        setTimeout(() => {
+          btnLogTrip.textContent = "Log trip to current shift audit";
+          btnLogTrip.style.background = "";
+        }, 1200);
+      }
+
+      function renderHistory() {
+        historyTableBody.innerHTML = "";
+
+        if (shiftHistory.length === 0) {
+          emptyHistoryNotice.style.display = "block";
+          updateShiftSummaryMetrics(0, 0, 0, 0, 0, 0, 0);
+          return;
+        }
+
+        emptyHistoryNotice.style.display = "none";
+
+        let totalKm = 0;
+        let totalBleed = 0;
+        let totalLoss = 0;
+        let countClear = 0;
+        let countFlagged = 0;
+        let countTheft = 0;
+
+        shiftHistory.forEach((trip, index) => {
+          totalKm += trip.odoKm;
+          if (trip.bleedLitres > 0) totalBleed += trip.bleedLitres;
+          totalLoss += trip.financialLoss;
+
+          if (trip.status === "RED") countTheft++;
+          else if (trip.status === "AMBER") countFlagged++;
+          else countClear++;
+
+          const tr = document.createElement("tr");
+
+          const badgeClass = trip.status === "RED" ? "b-red" : trip.status === "AMBER" ? "b-amber" : "b-green";
+
+          tr.innerHTML = `
+            <td><strong>${trip.timestamp}</strong></td>
+            <td><strong>${escapeHtml(trip.vehicleReg)}</strong><br><small style="color:var(--muted)">#${escapeHtml(trip.fleetId)}</small></td>
+            <td>${escapeHtml(trip.driverName)}<br><small style="color:var(--muted)">ID: ${escapeHtml(trip.staffId)}</small></td>
+            <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(trip.route)}</td>
+            <td><strong>${trip.odoKm.toFixed(0)} km</strong></td>
+            <td>${trip.expectedLitres.toFixed(1)} L</td>
+            <td><strong>${trip.pumpedLitres.toFixed(1)} L</strong></td>
+            <td>${trip.actualL100.toFixed(1)}</td>
+            <td style="color:${trip.bleedLitres > 0 ? 'var(--red)' : 'var(--green)'}; font-weight:800;">
+              ${trip.bleedLitres > 0 ? "+" : ""}${trip.bleedLitres.toFixed(1)} L
+            </td>
+            <td style="font-weight:800; color:${trip.financialLoss > 0 ? 'var(--red)' : 'var(--ink)'};">
+              R ${trip.financialLoss.toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </td>
+            <td>
+              <span class="badge-status ${badgeClass}">${trip.status === "RED" ? "Theft alert" : trip.status === "AMBER" ? "Flagged" : "Approved"}</span>
+            </td>
+            <td style="white-space:nowrap;">
+              <button type="button" class="tbl-action-btn" onclick="window.viewSlipForHistory(${index})">Slip</button>
+              <button type="button" class="tbl-action-btn" onclick="window.deleteHistoryItem(${index})" style="color:var(--red);">Del</button>
+            </td>
+          `;
+
+          historyTableBody.appendChild(tr);
+        });
+
+        updateShiftSummaryMetrics(shiftHistory.length, totalKm, totalBleed, totalLoss, countClear, countFlagged, countTheft);
+      }
+
+      function updateShiftSummaryMetrics(count, km, bleed, loss, clear, flagged, theft) {
+        shiftTotalTrips.textContent = count;
+        shiftTotalKm.textContent = km.toLocaleString("en-ZA") + " km";
+        shiftTotalBleedLitres.textContent = bleed.toFixed(1) + " L";
+        shiftTotalLossZar.textContent = "R " + loss.toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        shiftClearCount.textContent = `${clear} Clear`;
+        shiftFlaggedCount.textContent = `${flagged} Flagged`;
+        shiftTheftCount.textContent = `${theft} Theft`;
+
+        shiftLossTicker.textContent = `Shift loss: R ${loss.toFixed(2)} | ${bleed.toFixed(1)} L bleed | ${theft} theft alerts`;
+      }
+
+      window.viewSlipForHistory = function(index) {
+        const item = shiftHistory[index];
+        if (!item) return;
+        populateAodFromRecord(item);
+        aodModal.classList.remove("hidden");
+      };
+
+      window.deleteHistoryItem = function(index) {
+        if (confirm("Remove this trip from shift log?")) {
+          shiftHistory.splice(index, 1);
+          saveHistoryToStorage();
+          renderHistory();
+        }
+      };
+
+      function clearShiftHistory() {
+        if (shiftHistory.length === 0) return;
+        if (confirm("Are you sure you want to clear the entire shift audit log? This cannot be undone.")) {
+          shiftHistory = [];
+          saveHistoryToStorage();
+          renderHistory();
+        }
+      }
+
+      function exportShiftCsv() {
+        if (shiftHistory.length === 0) {
+          alert("No trips to export. Log at least one trip first.");
+          return;
+        }
+
+        let csv = "Trip ID,Time,Depot,Vehicle Reg,Fleet Unit,Driver Name,Staff ID,Route,Odo Km,GPS Km,Baseline L100,Actual L100,Expected Litres,Pumped Litres,Bleed Litres,Variance %,Fuel Price ZAR,Financial Loss ZAR,Status,AOD Slip Serial\n";
+
+        shiftHistory.forEach(item => {
+          csv += [
+            `"${item.id}"`,
+            `"${item.timestamp}"`,
+            `"${item.depot.replace(/"/g, '""')}"`,
+            `"${item.vehicleReg.replace(/"/g, '""')}"`,
+            `"${item.fleetId.replace(/"/g, '""')}"`,
+            `"${item.driverName.replace(/"/g, '""')}"`,
+            `"${item.staffId.replace(/"/g, '""')}"`,
+            `"${item.route.replace(/"/g, '""')}"`,
+            item.odoKm.toFixed(1),
+            item.gpsKm.toFixed(1),
+            item.baselineRate.toFixed(2),
+            item.actualL100.toFixed(2),
+            item.expectedLitres.toFixed(2),
+            item.pumpedLitres.toFixed(2),
+            item.bleedLitres.toFixed(2),
+            item.variancePct.toFixed(2),
+            item.fuelPrice.toFixed(2),
+            item.financialLoss.toFixed(2),
+            `"${item.status}"`,
+            `"${item.slipSerial}"`
+          ].join(",") + "\n";
+        });
+
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        const dateStr = new Date().toISOString().slice(0, 10);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `TRIPGUARD_SHIFT_AUDIT_${dateStr}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // ─── AOD DISPUTE SLIP GENERATOR ───────────────────────────────────────
+      function populateAodFromRecord(data) {
+        aodSlipSerial.textContent = data.slipSerial || "AOD-202611-9842";
+        aodDateStamp.textContent = new Date().toLocaleDateString("en-ZA", { day: "2-digit", month: "short", year: "numeric" }) + " " + (data.timestamp || "16:45");
+        aodDepotName.textContent = data.depot || "East London Depot";
+        aodVehicleReg.textContent = data.vehicleReg || "CA 842-991";
+        aodFleetUnit.textContent = data.fleetId || "FLEET-01";
+        aodDriverName.textContent = data.driverName || "Driver";
+        aodDriverNameSign.textContent = data.driverName || "Driver";
+        aodStaffId.textContent = data.staffId || "EMP-000";
+        aodRouteCorridor.textContent = data.route || "Corridor";
+
+        aodOdoStart.textContent = (data.odoStart ? data.odoStart.toLocaleString("en-ZA") : "0") + " km";
+        aodOdoEnd.textContent = (data.odoEnd ? data.odoEnd.toLocaleString("en-ZA") : "0") + " km";
+        aodOdoKm.textContent = (data.odoKm || data.totalKm || 0).toFixed(1) + " km";
+        aodGpsKm.textContent = (data.gpsKm || 0).toFixed(1) + " km";
+
+        aodBaselineRate.textContent = (data.baselineRate || 48).toFixed(1) + " L / 100km";
+        aodAllowedLitres.textContent = (data.expectedLitres || 0).toFixed(2) + " Litres";
+        aodPumpedLitres.textContent = (data.pumpedLitres || data.actualLitres || 0).toFixed(2) + " Litres";
+
+        const bleed = (data.bleedLitres || 0);
+        aodBleedLitres.textContent = (bleed >= 0 ? "+" : "") + bleed.toFixed(2) + " Litres";
+        aodBleedPct.textContent = ((data.variancePct || 0) >= 0 ? "+" : "") + (data.variancePct || 0).toFixed(2) + "% above target";
+
+        aodFuelPrice.textContent = "R " + (data.fuelPrice || 23.50).toFixed(2) + " / Litre";
+        aodTotalDeduction.textContent = "R " + (data.financialLoss || 0).toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ZAR";
+      }
+
+      function openAodModal() {
+        calculateAudit();
+        populateAodFromRecord(currentAudit);
+        aodModal.classList.remove("hidden");
+      }
+
+      function closeAodModal() {
+        aodModal.classList.add("hidden");
+      }
+
+      // ─── WHATSAPP DISPUTE GENERATOR ───────────────────────────────────────
+      function formatWhatsAppMessage(data) {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString("en-ZA", { day: "2-digit", month: "short", year: "numeric" });
+        const timeStr = now.toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit" });
+
+        return `[TRIPGUARD DEBRIEF DISPUTE ALERT]
+--------------------------------------
+*DEPOT:* ${data.depot}
+*DATE:* ${dateStr}, ${timeStr}
+*VEHICLE:* ${data.vehicleReg} (Unit #${data.fleetId})
+*DRIVER:* ${data.driverName} (Staff ID: ${data.staffId})
+*ROUTE:* ${data.route}
+--------------------------------------
+*ODOMETER:* ${data.totalKm.toFixed(1)} km (GPS: ${data.gpsKm.toFixed(1)} km)
+*BASELINE TARGET:* ${data.effectiveBaseline.toFixed(1)} L/100km (${data.expectedLitres.toFixed(1)} L Allowed)
+*DIESEL PUMPED:* ${data.dieselPumped.toFixed(1)} L (${data.actualL100.toFixed(1)} L/100km)
+*VARIANCE BLEED:* ${data.bleedLitres > 0 ? "+" : ""}${data.bleedLitres.toFixed(1)} L (${data.variancePct > 0 ? "+" : ""}${data.variancePct.toFixed(1)}%)
+*STATUS:* ${data.statusText}
+--------------------------------------
+*FINANCIAL LOSS:* R ${data.financialLoss.toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ZAR (@ R${data.fuelPrice.toFixed(2)}/L)
+*ACTION:* Form AOD-104 Notice Ref: ${data.slipSerial}
+--------------------------------------
+_TRIPGUARD V1 • South African Road Freight Telematics_`;
+      }
+
+      function openWhatsAppModal() {
+        calculateAudit();
+        const msg = formatWhatsAppMessage(currentAudit);
+        waTextPreview.textContent = msg;
+        waCopyFeedback.style.display = "none";
+        waModal.classList.remove("hidden");
+      }
+
+      function closeWhatsAppModal() {
+        waModal.classList.add("hidden");
+      }
+
+      function copyWhatsAppText() {
+        const text = waTextPreview.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          waCopyFeedback.style.display = "block";
+          btnCopyWaText.textContent = "Copied";
+          setTimeout(() => {
+            btnCopyWaText.textContent = "Copy notice text";
+          }, 2000);
+        }).catch(() => {
+          const range = document.createRange();
+          range.selectNodeContents(waTextPreview);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+          waCopyFeedback.style.display = "block";
+          waCopyFeedback.textContent = "Selected. Press Ctrl+C to copy.";
+        });
+      }
+
+      function launchWhatsAppWeb() {
+        const text = encodeURIComponent(waTextPreview.textContent);
+        window.open(`https://wa.me/?text=${text}`, "_blank");
+      }
+
+      function escapeHtml(str) {
+        if (!str) return "";
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      // Initialize on DOM Ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>
